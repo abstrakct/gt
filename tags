@@ -1,0 +1,328 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+A_BLOOD	cards.h	33;"	d
+A_CRESCENT	cards.h	36;"	d
+A_FLESH	cards.h	35;"	d
+A_FOOL	cards.h	40;"	d
+A_HEAVEN	cards.h	34;"	d
+A_MASTER	cards.h	37;"	d
+A_REAPER	cards.h	38;"	d
+A_SOUL	cards.h	32;"	d
+A_STAR	cards.h	39;"	d
+A_TIGEER	cards.h	41;"	d
+CARDS_H	cards.h	2;"	d
+CHAR_CITY	display.h	18;"	d
+CHAR_DFLOOR	display.h	24;"	d
+CHAR_DUNGEON	display.h	23;"	d
+CHAR_DWALL	display.h	25;"	d
+CHAR_FOREST	display.h	9;"	d
+CHAR_PLAIN	display.h	4;"	d
+CHAR_PLAYER	display.h	27;"	d
+CITY	world.h	9;"	d
+CITY_NOHOUSE	world.h	11;"	d
+CLASSES	player.h	10;"	d
+CLASS_FIGHTER	player.h	8;"	d
+CLASS_WIZARD	player.h	9;"	d
+CMD_DOWN	cmd.h	19;"	d
+CMD_ENTERDUNGEON	cmd.h	28;"	d
+CMD_H	cmd.h	2;"	d
+CMD_LEAVEDUNGEON	cmd.h	29;"	d
+CMD_LEFT	cmd.h	16;"	d
+CMD_LOAD	cmd.h	27;"	d
+CMD_LONGDOWN	cmd.h	24;"	d
+CMD_LONGLEFT	cmd.h	21;"	d
+CMD_LONGRIGHT	cmd.h	22;"	d
+CMD_LONGUP	cmd.h	23;"	d
+CMD_QUIT	cmd.h	20;"	d
+CMD_RIGHT	cmd.h	17;"	d
+CMD_SAVE	cmd.h	26;"	d
+CMD_TOGGLEFOV	cmd.h	25;"	d
+CMD_UP	cmd.h	18;"	d
+COLOR_CITY	display.h	19;"	d
+COLOR_CITY1	display.h	20;"	d
+COLOR_CITY2	display.h	21;"	d
+COLOR_FOREST	display.h	10;"	d
+COLOR_FOREST1	display.h	12;"	d
+COLOR_FOREST2	display.h	13;"	d
+COLOR_FOREST3	display.h	14;"	d
+COLOR_FOREST4	display.h	15;"	d
+COLOR_FOREST5	display.h	16;"	d
+COLOR_PLAIN1	display.h	5;"	d
+COLOR_PLAIN2	display.h	6;"	d
+COLOR_PLAIN3	display.h	7;"	d
+COLOR_PLAYER	display.h	28;"	d
+CONTEXT_DUNGEON	gt.h	30;"	d
+CONTEXT_OUTSIDE	gt.h	29;"	d
+CURRENT_CITY	gt.h	77;"	d
+CURRENT_FOREST	gt.h	79;"	d
+CURRENT_VILLAGE	gt.h	78;"	d
+C_BLACK	cards.h	29;"	d
+C_GOLD	cards.h	28;"	d
+C_PURPLE	cards.h	30;"	d
+DELVE_H	delve.h	2;"	d
+DEVEL_MODE	gt.c	19;"	d	file:
+DISPLAY_H	display.h	2;"	d
+DUNGEON	world.h	14;"	d
+DUNGEONSIZE	world.h	19;"	d
+D_FLOOR	gt.h	23;"	d
+D_WALL	gt.h	24;"	d
+FLOOR	delve.c	56;"	d	file:
+FOREST	world.h	8;"	d
+FOREST_NOTREE	world.h	13;"	d
+FOREST_SYLLABLES	namegen.c	77;"	d	file:
+GT_H	gt.h	2;"	d
+GT_VERSION	gt.h	12;"	d
+HAS_DUNGEON	gt.h	40;"	d
+HAS_EXIT	gt.h	41;"	d
+HEIGHTMAP_H	heightmap.h	2;"	d
+HM_HEIGHT	heightmap.c	14;"	d	file:
+HM_WIDTH	heightmap.c	13;"	d	file:
+INFO	gt.h	19;"	d
+JUPITER	cards.h	23;"	d
+LARGECITYSIZE	world.h	17;"	d
+MARS	cards.h	22;"	d
+MAXFORESTSIZE	world.h	16;"	d
+MAX_MESS	gt.h	91;"	d
+MERCURY	cards.h	20;"	d
+MOUNTAIN	world.h	7;"	d
+NAMEGEN_H	namegen.h	2;"	d
+NAME_CITY	namegen.h	5;"	d
+NAME_FOREST	namegen.h	7;"	d
+NAME_PERSON	namegen.h	4;"	d
+NAME_VILLAGE	namegen.h	6;"	d
+NEPTUNE	cards.h	25;"	d
+NORMAL	gt.h	20;"	d
+PLAIN	world.h	6;"	d
+PLAYER	gt.h	18;"	d
+PLAYER_H	player.h	2;"	d
+RACES	player.h	6;"	d
+RACE_ELF	player.h	5;"	d
+RACE_HUMAN	player.h	4;"	d
+RQR	delve.c	59;"	d	file:
+SATURN	cards.h	24;"	d
+URANUS	cards.h	26;"	d
+VENUS	cards.h	21;"	d
+VILLAGE	world.h	10;"	d
+VILLAGESIZE	world.h	18;"	d
+VILLAGE_NOHOUSE	world.h	12;"	d
+WALL	delve.c	57;"	d	file:
+WORLD_H	world.h	2;"	d
+WV_APATHIC	player.h	13;"	d
+WV_DEPRESSED	player.h	14;"	d
+WV_OPTIMISTIC	player.h	12;"	d
+XSIZE	gt.h	14;"	d
+Xoff	delve.c	/^int Xoff[8] = {1,  1,  0, -1, -1, -1,  0,  1};$/;"	v
+YSIZE	gt.h	15;"	d
+Yoff	delve.c	/^int Yoff[8] = {0,  1,  1,  1,  0, -1, -1, -1};$/;"	v
+addHill	heightmap.c	/^void addHill(TCOD_heightmap_t *hm,int nbHill, float baseRadius, float radiusVar, float height)$/;"	f
+alignment	gt.h	/^        int alignment;$/;"	m	struct:__anon4
+aspect	cards.h	/^        short aspect;$/;"	m	struct:__anon1
+aspects	cards.c	/^char *aspects[] = { "Soul", "Blood", "Heavens", "Flesh", "Crescent", "Master", "Reaper", "Star", "Fool", "Tiger" };$/;"	v
+buildMap	heightmap.c	/^void buildMap(TCOD_heightmap_t *hm)$/;"	f
+card_t	cards.h	/^} card_t;$/;"	t	typeref:struct:__anon1
+cavern	delve.c	/^int cavern(struct mappiece mpc, int xorig, int yorig,$/;"	f
+ccolors	cards.c	/^char *ccolors[] = { "Golden", "Black", "Purple" };$/;"	v
+cell	gt.h	/^        cell_t cell[YSIZE][XSIZE];$/;"	m	struct:__anon6
+cell	gt.h	/^        cell_t cell[YSIZE][XSIZE];$/;"	m	struct:__anon7
+cell_t	gt.h	/^} cell_t;$/;"	t	typeref:struct:__anon3
+cellnum_est	delve.c	/^int cellnum_est(int totalcells, int ngb_min, int ngb_max)$/;"	f
+cellstore	delve.c	/^struct cellstore {$/;"	s	file:
+cha	player.h	65;"	d
+cha_mod	player.h	/^        signed int cha_mod;$/;"	m	struct:__anon10
+cha_mod	player.h	/^        signed int cha_mod;$/;"	m	struct:__anon9
+charisma	player.h	/^        int strength, intelligence, knowledge, physique, dexterity, charisma;$/;"	m	struct:__anon8
+check_location	gt.c	/^void check_location(player_t *player, world_t *world)$/;"	f
+cities	gt.h	/^        int cities, current_city;$/;"	m	struct:__anon7
+city	gt.h	/^        city_t city[50];$/;"	m	struct:__anon7
+city_final	namegen.c	/^char *city_final[] = {$/;"	v
+city_initial	namegen.c	/^char *city_initial[] = {$/;"	v
+city_middle1	namegen.c	/^char *city_middle1[] = {$/;"	v
+city_middle2	namegen.c	/^char *city_middle2[] = {$/;"	v
+city_t	gt.h	/^} city_t;$/;"	t	typeref:struct:__anon4
+class_t	player.h	/^} class_t;$/;"	t	typeref:struct:__anon10
+classes	player.c	/^class_t classes[CLASSES+1] = {  \/* name, hp, phys, str, intl, know, dex, cha, minphys, minstr, minintl, minknow, mindex, mincha*\/ $/;"	v
+cmd	cmd.h	/^        int cmd;$/;"	m	struct:__anon2
+cmd_t	cmd.h	/^} cmd_t;$/;"	t	typeref:struct:__anon2
+cmp_keystruct	cmd.c	/^int cmp_keystruct(TCOD_key_t a, TCOD_key_t b)$/;"	f
+color	cards.h	/^        short color;$/;"	m	struct:__anon1
+color	gt.h	/^	TCOD_color_t color;$/;"	m	struct:__anon3
+context	gt.h	/^        int context;$/;"	m	struct:__anon7
+current_city	gt.h	/^        int cities, current_city;$/;"	m	struct:__anon7
+current_forest	gt.h	/^        int forests, current_forest;$/;"	m	struct:__anon7
+current_village	gt.h	/^        int villages, current_village;$/;"	m	struct:__anon7
+currentcommands	cmd.c	/^cmd_t *currentcommands;$/;"	v
+currmess	gt.c	/^int messages, currmess;$/;"	v
+debuglog	gt.c	/^FILE *debuglog;$/;"	v
+deck	cards.c	/^card_t deck[7][3][10];$/;"	v
+deck	mkcards.c	/^card_t deck[7][3][10];$/;"	v
+delstore	delve.c	/^void delstore(struct cellstore* cstore)$/;"	f
+delveon	delve.c	/^int delveon(struct mappiece mpc, struct cellstore* cstore,$/;"	f
+desc	cmd.h	/^        char *desc;$/;"	m	struct:__anon2
+dex	player.h	64;"	d
+dex_mod	player.h	/^        signed int dex_mod;$/;"	m	struct:__anon10
+dex_mod	player.h	/^        signed int dex_mod;$/;"	m	struct:__anon9
+dexterity	player.h	/^        int strength, intelligence, knowledge, physique, dexterity, charisma;$/;"	m	struct:__anon8
+dice	gt.c	/^int dice(int num, int sides, signed int modifier)$/;"	f
+die	gt.c	/^void die(char *message)$/;"	f
+digcell	delve.c	/^int digcell(struct mappiece mpc, struct cellstore* cstore, int x, int y, char flo, char ava)$/;"	f
+draw_dungeon	display.c	/^void draw_dungeon(int startx, int starty, player_t *player, int width, int height, world_t *world)$/;"	f
+draw_dungeon_fov	display.c	/^void draw_dungeon_fov(int startx, int starty, player_t *player, int width, int height, world_t *world, TCOD_map_t fovmap)$/;"	f
+draw_world	display.c	/^void draw_world(int startx, int starty, player_t *player, int width, int height, world_t *world)$/;"	f
+draw_world_fov	display.c	/^void draw_world_fov(int startx, int starty, player_t *player, int width, int height, world_t *world, TCOD_map_t fovmap)$/;"	f
+dump_heightmap	gt.c	/^void dump_heightmap(TCOD_heightmap_t *hm)$/;"	f
+dungeon	gt.h	/^        dungeon_t dungeon;$/;"	m	struct:__anon7
+dungeon_t	gt.h	/^} dungeon_t;$/;"	t	typeref:struct:__anon6
+dungeoncommands	cmd.c	/^cmd_t dungeoncommands[] = {$/;"	v
+dungeons	gt.h	/^        int dungeons;$/;"	m	struct:__anon7
+explored	gt.h	/^        int explored;$/;"	m	struct:__anon3
+flags	gt.h	/^        int flags;$/;"	m	struct:__anon3
+flags	gt.h	/^        int flags;$/;"	m	struct:__anon5
+forest	gt.h	/^        forest_t forest[100];$/;"	m	struct:__anon7
+forest_final	namegen.c	/^char *forest_final[] = {$/;"	v
+forest_initial	namegen.c	/^char *forest_initial[] = {$/;"	v
+forest_middle1	namegen.c	/^char *forest_middle1[] = {$/;"	v
+forest_middle2	namegen.c	/^char *forest_middle2[] = {$/;"	v
+forest_t	gt.h	/^} forest_t;$/;"	t	typeref:struct:__anon5
+forests	gt.h	/^        int forests, current_forest;$/;"	m	struct:__anon7
+generate_area	world.c	/^void generate_area(int num, int type, int maxsize, int modifier, world_t *world)$/;"	f
+generate_city_name	namegen.c	/^void generate_city_name(char *n)$/;"	f
+generate_deck	cards.c	/^void generate_deck()$/;"	f
+generate_dungeon	delve.c	/^int generate_dungeon(int xsize, int ysize, int ngb_min, int ngb_max, int connchance, int cellnum, world_t *world)$/;"	f
+generate_forest_name	namegen.c	/^void generate_forest_name(char *n)$/;"	f
+generate_heightmap	heightmap.c	/^void generate_heightmap(TCOD_heightmap_t *hm)$/;"	f
+generate_name	namegen.c	/^void generate_name(int type, char *thename)$/;"	f
+generate_person_name	namegen.c	/^void generate_person_name(char *n)$/;"	f
+generate_village_name	namegen.c	/^void generate_village_name(char *n)$/;"	f
+generate_world	world.c	/^void generate_world(world_t *world)$/;"	f
+get_city_at	gt.c	/^int get_city_at(int x, int y, world_t *world)$/;"	f
+get_command	cmd.c	/^int get_command()$/;"	f
+get_dungeon_starting_location	gt.c	/^void get_dungeon_starting_location(player_t *player, world_t *world)$/;"	f
+get_forest_at	gt.c	/^int get_forest_at(int x, int y, world_t *world)$/;"	f
+get_init_hp	player.c	/^int get_init_hp(player_t *player)$/;"	f
+get_raceclass_selection	gt.c	/^void get_raceclass_selection(player_t *player)$/;"	f
+get_village_at	gt.c	/^int get_village_at(int x, int y, world_t *world)$/;"	f
+has_dungeon	gt.h	43;"	d
+has_exit	gt.h	44;"	d
+hit_wall	gt.h	83;"	d
+houses	gt.h	/^        int houses;$/;"	m	struct:__anon4
+hp	player.h	/^        int hp, maxhp;$/;"	m	struct:__anon8
+hp_mod	player.h	/^        signed int hp_mod;$/;"	m	struct:__anon10
+hp_mod	player.h	/^        signed int hp_mod;$/;"	m	struct:__anon9
+hp_phys_adj	player.c	/^signed int hp_phys_adj[] = { 0, -3, -2, -2, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 3, 4, 5 };$/;"	v
+inbord	delve.c	/^int inbord(struct mappiece mpc, int x, int y)$/;"	f
+index	delve.c	/^    int index;$/;"	m	struct:cellstore	file:
+indungeon	gt.h	82;"	d
+init_dungeon	gt.c	/^void init_dungeon(world_t *world, int maxxsize, int maxysize)$/;"	f
+init_fov_dungeon	gt.c	/^void init_fov_dungeon(world_t *world, TCOD_map_t fovmap)$/;"	f
+init_fov_world	gt.c	/^void init_fov_world(world_t *world, TCOD_map_t fovmap)$/;"	f
+init_player	player.c	/^void init_player(player_t *player, int x, int y)$/;"	f
+intelligence	player.h	/^        int strength, intelligence, knowledge, physique, dexterity, charisma;$/;"	m	struct:__anon8
+intl	player.h	61;"	d
+intl_mod	player.h	/^        signed int intl_mod;$/;"	m	struct:__anon10
+intl_mod	player.h	/^        signed int intl_mod;$/;"	m	struct:__anon9
+key	cmd.h	/^        TCOD_key_t key;$/;"	m	struct:__anon2
+know	player.h	62;"	d
+know_mod	player.h	/^        signed int know_mod;$/;"	m	struct:__anon10
+know_mod	player.h	/^        signed int know_mod;$/;"	m	struct:__anon9
+knowledge	player.h	/^        int strength, intelligence, knowledge, physique, dexterity, charisma;$/;"	m	struct:__anon8
+load_world	gt.c	/^int load_world(world_t *world, player_t *player, char *filename)$/;"	f
+loadpxy	gt.c	/^void loadpxy(player_t *player)$/;"	f
+m	gt.c	/^char m[10][250];$/;"	v
+main	gt.c	/^int main(int argc, char *argv[])$/;"	f
+main	mkcards.c	/^int main()$/;"	f
+map	delve.c	/^    char** map;$/;"	m	struct:mappiece	file:
+map_console	gt.c	/^TCOD_console_t map_console;$/;"	v
+mapcxsize	gt.c	/^int mapcxsize, mapcysize;$/;"	v
+mapcysize	gt.c	/^int mapcxsize, mapcysize;$/;"	v
+mapheight	gt.h	26;"	d
+mappiece	delve.c	/^struct mappiece {$/;"	s	file:
+mapwidth	gt.h	27;"	d
+maxhp	player.h	/^        int hp, maxhp;$/;"	m	struct:__anon8
+mess	gt.c	/^void mess(char *message)$/;"	f
+messages	gt.c	/^int messages, currmess;$/;"	v
+mincha	player.h	/^        short mincha;$/;"	m	struct:__anon10
+mincha	player.h	/^        short mincha;$/;"	m	struct:__anon9
+mindex	player.h	/^        short mindex;$/;"	m	struct:__anon10
+mindex	player.h	/^        short mindex;$/;"	m	struct:__anon9
+minintl	player.h	/^        short minintl;$/;"	m	struct:__anon10
+minintl	player.h	/^        short minintl;$/;"	m	struct:__anon9
+minknow	player.h	/^        short minknow;$/;"	m	struct:__anon10
+minknow	player.h	/^        short minknow;$/;"	m	struct:__anon9
+minphys	player.h	/^        short minphys;$/;"	m	struct:__anon10
+minphys	player.h	/^        short minphys;$/;"	m	struct:__anon9
+minstr	player.h	/^        short minstr;$/;"	m	struct:__anon10
+minstr	player.h	/^        short minstr;$/;"	m	struct:__anon9
+mkstore	delve.c	/^struct cellstore mkstore(int size)$/;"	f
+mpc_mkempty	delve.c	/^struct mappiece mpc_mkempty(int xsize, int ysize)$/;"	f
+name	cards.h	/^        char name[40];$/;"	m	struct:__anon1
+name	gt.h	/^        char name[25];$/;"	m	struct:__anon5
+name	gt.h	/^        char name[40];$/;"	m	struct:__anon4
+name	player.h	/^        char name[20];$/;"	m	struct:__anon8
+name	player.h	/^        char name[25];$/;"	m	struct:__anon10
+name	player.h	/^        char name[25];$/;"	m	struct:__anon9
+ngb_grouptab	delve.c	/^const int ngb_grouptab[256] = $/;"	v
+ngbcount	delve.c	/^int ngbcount(struct mappiece mpc, int x, int y, char trn)$/;"	f
+ngbgroups	delve.c	/^int ngbgroups(struct mappiece mpc, int x, int y, char trn)$/;"	f
+noise	heightmap.c	/^TCOD_noise_t noise=NULL;$/;"	v
+num_commands	cmd.c	/^int num_commands;$/;"	v
+outside	gt.h	81;"	d
+outsidecommands	cmd.c	/^cmd_t outsidecommands[] = {$/;"	v
+perc	gt.c	/^int perc(int n, int p)$/;"	f
+phys	player.h	63;"	d
+phys_mod	player.h	/^        signed int phys_mod;$/;"	m	struct:__anon10
+phys_mod	player.h	/^        signed int phys_mod;$/;"	m	struct:__anon9
+physique	player.h	/^        int strength, intelligence, knowledge, physique, dexterity, charisma;$/;"	m	struct:__anon8
+planet	cards.h	/^        short planet;$/;"	m	struct:__anon1
+planets	cards.c	/^char *planets[] = { "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Neptune", "Uranus" };$/;"	v
+player_t	player.h	/^} player_t;$/;"	t	typeref:struct:__anon8
+px	gt.c	/^int px,py;$/;"	v
+py	gt.c	/^int px,py;$/;"	v
+race	player.h	/^        short race, class;$/;"	m	struct:__anon8
+race_t	player.h	/^} race_t;$/;"	t	typeref:struct:__anon9
+races	player.c	/^race_t races[RACES+1] = {       \/* name, hp, phys, str, intl, know, dex, cha, minphys, minstr, minintl, minknow, mindex, mincha*\/$/;"	v
+rnd	heightmap.c	/^TCOD_random_t rnd=NULL;$/;"	v
+rnd_i0	delve.c	/^int rnd_i0(int n) \/* 0 <= rnd_i0(n) < n *\/$/;"	f
+rnd_perm	delve.c	/^void rnd_perm(int *tab, int nelem)$/;"	f
+rndpull	delve.c	/^int rndpull(struct cellstore* cstore, int* x, int* y)$/;"	f
+save_world	gt.c	/^void save_world(world_t *world, player_t *player, char *filename)$/;"	f
+savedplayer	gt.c	/^player_t savedplayer;$/;"	v
+savepxy	gt.c	/^void savepxy(player_t *player)$/;"	f
+set_explored_city	gt.c	/^void set_explored_city(TCOD_map_t fovmap, world_t *world)$/;"	f
+set_explored_dungeon_cell	gt.h	84;"	d
+set_explored_forest	gt.c	/^void set_explored_forest(TCOD_map_t fovmap, world_t *world)$/;"	f
+set_explored_village	gt.c	/^void set_explored_village(TCOD_map_t fovmap, world_t *world)$/;"	f
+show_welcome_screen	gt.c	/^void show_welcome_screen(int wmaxx, int wmaxy)$/;"	f
+size	delve.c	/^    int size;$/;"	m	struct:cellstore	file:
+storecell	delve.c	/^int storecell(struct cellstore* cstore, int x, int y)$/;"	f
+str	player.h	60;"	d
+str_mod	player.h	/^        signed int str_mod;$/;"	m	struct:__anon10
+str_mod	player.h	/^        signed int str_mod;$/;"	m	struct:__anon9
+strength	player.h	/^        int strength, intelligence, knowledge, physique, dexterity, charisma;$/;"	m	struct:__anon8
+type	gt.h	/^	int type;$/;"	m	struct:__anon3
+update_info	display.c	/^void update_info(int x, int y, world_t *world, player_t *player)$/;"	f
+update_stats	display.c	/^void update_stats(int x, int y, world_t *world, player_t *player)$/;"	f
+uti_icbrt	delve.c	/^int uti_icbrt(int arg)$/;"	f
+village	gt.h	/^        city_t village[100];$/;"	m	struct:__anon7
+villages	gt.h	/^        int villages, current_village;$/;"	m	struct:__anon7
+world_t	gt.h	/^} world_t;$/;"	t	typeref:struct:__anon7
+worldview	player.h	/^        short worldview;$/;"	m	struct:__anon8
+x	player.h	/^	int x, y;$/;"	m	struct:__anon8
+x1	gt.h	/^        int x1, y1, x2, y2;$/;"	m	struct:__anon4
+x1	gt.h	/^        int x1, y1, x2, y2;$/;"	m	struct:__anon5
+x2	gt.h	/^        int x1, y1, x2, y2;$/;"	m	struct:__anon4
+x2	gt.h	/^        int x1, y1, x2, y2;$/;"	m	struct:__anon5
+xs	delve.c	/^    int* xs;$/;"	m	struct:cellstore	file:
+xsize	delve.c	/^    int xsize;$/;"	m	struct:mappiece	file:
+xsize	gt.h	/^        int xsize, ysize;$/;"	m	struct:__anon6
+y	player.h	/^	int x, y;$/;"	m	struct:__anon8
+y1	gt.h	/^        int x1, y1, x2, y2;$/;"	m	struct:__anon4
+y1	gt.h	/^        int x1, y1, x2, y2;$/;"	m	struct:__anon5
+y2	gt.h	/^        int x1, y1, x2, y2;$/;"	m	struct:__anon4
+y2	gt.h	/^        int x1, y1, x2, y2;$/;"	m	struct:__anon5
+ys	delve.c	/^    int* ys;$/;"	m	struct:cellstore	file:
+ysize	delve.c	/^    int ysize;$/;"	m	struct:mappiece	file:
+ysize	gt.h	/^        int xsize, ysize;$/;"	m	struct:__anon6

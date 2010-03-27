@@ -1,0 +1,18 @@
+
+v0.0.10: (2010-03-12)
+We now have ALIVE monsters! The default AI is "choose random direction;
+walk there". The first 3 monsters are "a kitty cat", "a grinning idiot" and "a
+zombie jesus".
+
+v0.0.11: (2010-03-23)
+* Slightly more intelligent AI
+* GOLD! And, you can pick it up!
+* A lot of new items! (But they still do nothing!)
+* Speed! Monsters (and theoretically the player) now move at different speeds.
+* UI tweaks!
+* You can wield items! Not that it does any difference yet, but still!
+
+
+	-- An example: The Silent Creeper now seeks out the player (but the
+			player can outrun him! At least until speed affecting
+			items/spells are added...)
