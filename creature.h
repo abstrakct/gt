@@ -54,6 +54,7 @@ struct creature {
         void (*ai)(struct creature *, struct creature *);      // artificial intelligence handler!!
         int goalx, goaly;                   // for simple outdoor pathfinder ai
         TCOD_map_t fov;
+        struct creature *prev;
         struct creature *next;
 };
 
@@ -61,7 +62,7 @@ typedef struct creature creature_t;
 typedef struct creature player_t;
 
 /* for rings */
-#define LEFTPINKY 0
+#define  LEFTPINKY 0
 #define  LEFTRINGF 1
 #define  LEFTMIDDL 2
 #define  LEFTINDEX 3
@@ -73,7 +74,7 @@ typedef struct creature player_t;
 #define RIGHTPINKY 9
 
 #define START_MONSTERS creature_t monsters[] = {
-#define MONSTER(name, character, level, hp, ai, speed, str, phys, intl, know, dex, cha) { 0, 0, hp, hp, 0, 0, { str, phys, intl, know, dex, cha }, level, 0, 0, 0, 0, 0, { 0,0,0,0,0,0, {0,0,0,0,0,0,0,0,0,0} }, 0, name, character, speed, 0, {0,0,0}, ai, 0, 0, 0, 0},
+#define MONSTER(name, character, level, hp, ai, speed, str, phys, intl, know, dex, cha) { 0, 0, hp, hp, 0, 0, { str, phys, intl, know, dex, cha }, level, 0, 0, 0, 0, 0, { 0,0,0,0,0,0, {0,0,0,0,0,0,0,0,0,0} }, 0, name, character, speed, 0, {0,0,0}, ai, 0, 0, 0, 0, 0},
 #define END_MONSTERS };
 
 

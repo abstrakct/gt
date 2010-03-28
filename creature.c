@@ -240,7 +240,7 @@ void init_monsters(world_t *world, player_t *player)
                         die("memory allocation error!");
 
                 *(tmp->next) = monsters[what];
-                //printf("\tcreated a %s\n", tmp->next->name);
+                tmp->next->prev = tmp;
                 tmp = tmp->next;
                 tmp->x = ri(0,XSIZE-1);
                 tmp->y = ri(0,YSIZE-1);

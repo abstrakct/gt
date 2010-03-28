@@ -18,6 +18,7 @@
 #include "cards.h"
 #include "you.h"
 #include "inventory.h"
+#include "attack.h"
 
 /* define this if development mode!! */
 #define DEVEL_MODE
@@ -410,6 +411,7 @@ int main(int argc, char *argv[])
         player_t *player;
         world_t *world;
         int oldx, oldy;
+        char wintitle[50];
         //TCOD_heightmap_t *hm;
 
         rndgen = TCOD_random_new(TCOD_RNG_CMWC);
@@ -450,8 +452,9 @@ int main(int argc, char *argv[])
                 strcpy(m[d].text, " ");
         }
 
+        sprintf(wintitle, "Gullible's Travails v%s", GT_VERSION);
         TCOD_console_set_custom_font("gt.png", TCOD_FONT_LAYOUT_ASCII_INROW, 16, 16);
-        TCOD_console_init_root(wmaxx, wmaxy, "Gullible's Travails", false);
+        TCOD_console_init_root(wmaxx, wmaxy, wintitle, false);
         map_console = TCOD_console_new(mapcxsize, mapcysize);
         mess_console = TCOD_console_new(mapcxsize+2, MAX_MESS+2);
         show_welcome_screen(wmaxx, wmaxy);
@@ -720,9 +723,11 @@ int main(int argc, char *argv[])
                 move_monsters(world, player);
 
                 if(ccell.monster) {
-                        you_c(TCOD_red, "attack the %s!", ccell.monster->name);
+                        //you_c(TCOD_red, "attack the %s!", ccell.monster->name);
+                        attack(player, ccell.monster, world);
                         player->x = oldx;
                         player->y = oldy;
+                        seenothing = 0;
                 }
 
 
