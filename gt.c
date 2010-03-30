@@ -477,6 +477,7 @@ int main(int argc, char *argv[])
                 generate_world(world);
         }
 
+        world->player = player;
         TCOD_console_print_center(NULL, wmaxx/2, (wmaxy/2)+4, TCOD_BKGND_NONE, "Creating a dungeon...");
         //init_dungeon(world, mapcxsize, mapcysize);
 
@@ -669,12 +670,13 @@ int main(int argc, char *argv[])
                                 }
                                 break;
                         case CMD_PICKUP:
-                                if(ccell.objects) {
+                                if(ccell.inventory) {
                                         if(ccell.inventory->type == OT_GOLD) {
                                                 player->inventory->quantity += ccell.inventory->quantity;
                                                 you_c(TCOD_green, "pick up %d pieces of gold.", ccell.inventory->quantity);
                                                 ccell.inventory->quantity = 0;
-                                                ccell.objects--;
+                                                free(ccell.inventory);
+                                                ccell.inventory = NULL;
                                         } else {
                                                 movefromcelltoinventory(player, world);
                                                 seenothing = 0;
@@ -720,16 +722,16 @@ int main(int argc, char *argv[])
                 if(key.vk == TCODK_ENTER && key.lalt)
                         TCOD_console_set_fullscreen(!TCOD_console_is_fullscreen());*/
 
-                move_monsters(world, player);
 
                 if(ccell.monster) {
-                        //you_c(TCOD_red, "attack the %s!", ccell.monster->name);
+                        ccell.monster->attacker = player;
                         attack(player, ccell.monster, world);
                         player->x = oldx;
                         player->y = oldy;
                         seenothing = 0;
                 }
 
+                move_monsters(world, player);
 
                 if(mapchanged) {
                         if(fov) {

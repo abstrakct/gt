@@ -1,7 +1,7 @@
 CC = gcc
 LIBTCODDIR = ../libtcod-1.5.0
 INCDIR = $(LIBTCODDIR)/include
-CFLAGS = -Wall -g -ggdb -I$(INCDIR) -I.
+CFLAGS = -Wall -g -ggdb -I$(INCDIR) -I. 
 LDFLAGS = -L$(LIBTCODDIR) -ltcod -Wl,-rpath=lib 
 
 SOURCES = gt.c world.c namegen.c display.c dungeon.c heightmap.c cmd.c cards.c objects.c you.c creature.c worldview.c inventory.c attack.c
@@ -24,7 +24,7 @@ makeobjdefs: $(MKOBJS) $(MKHDRS) $(MKSRCS)
 makeobjdefs.: $(MKSRCS) $(MKHDRS)
 
 clean:
-	rm *.o gt
+	rm *.o gt makeobjdefs
 
 
 all: makeobjdefs gt

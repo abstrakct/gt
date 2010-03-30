@@ -206,7 +206,6 @@ void addgoldtoworldcell(world_t *world, int x, int y, int i)
         tmp->type = OT_GOLD;
         tmp->quantity = ri(1, 200);
         world->cell[y][x].inventory = tmp;
-        world->cell[y][x].objects++;
 }
 
 void addbaseitemtoworldcell(world_t *world, int x, int y, int i)
@@ -233,7 +232,6 @@ void addbaseitemtoworldcell(world_t *world, int x, int y, int i)
         tmp->prev = first;
         tmp->next = NULL;
         world->cell[y][x].inventory = tmp;
-        world->cell[y][x].objects++;
 }
 
 
@@ -247,10 +245,9 @@ void generate_world(world_t *world)
         for(i=0;i<XSIZE;i++) {
                 for(j=0;j<YSIZE;j++) { 
                         world->cell[j][i].type = PLAIN;
-                        world->cell[j][i].explored = 0;
+                        world->cell[j][i].flags = 0;
                         color = ri(0,2);
                         world->cell[j][i].color = plaincolors[color];
-                        world->cell[j][i].objects = 0; 
                         world->cell[j][i].monster = NULL;
                 }
         }

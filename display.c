@@ -58,7 +58,7 @@ void draw_world_fov(int startx, int starty, player_t *player, int width, int hei
 
 
                         if(TCOD_map_is_in_fov(fovmap, i, j)) {
-                                if(world->cell[j][i].objects) {
+                                if(world->cell[j][i].inventory) {
                                         obj_t *t;
                                         //t = get_first_object(world->cell[j][i].inventory);
                                         t = world->cell[j][i].inventory->next;
@@ -120,7 +120,7 @@ void draw_world(int startx, int starty, player_t *player, int width, int height,
 
                         TCOD_console_set_foreground_color(map_console, world->cell[j][i].color);
 
-                        if(world->cell[j][i].objects) {
+                        if(world->cell[j][i].inventory) {
                                 obj_t *t;
                                 t = get_first_object(world->cell[j][i].inventory);
                                 c = objchars[t->type];
@@ -203,7 +203,7 @@ void draw_dungeon_fov(int startx, int starty, player_t *player, int width, int h
                         if(has_exit(i, j))
                                 c = CHAR_DUNGEON;
 
-                        if(TCOD_map_is_in_fov(fovmap, i, j) || world->dungeon.cell[j][i].explored) {
+                        if(TCOD_map_is_in_fov(fovmap, i, j) || (cell_explored(world->dungeon.cell[j][i]))) {
                                 set_explored_dungeon_cell(i, j);
                                 if(has_exit(i, j)) {
                                         col = TCOD_yellow;
@@ -270,26 +270,25 @@ void update_info(int x, int y, world_t *world, player_t *player, bool seenothing
 {
         char m[250];
         obj_t *o;
-        int i;
 
         m[0] = '\0';
 
-/*        if(outside && !has_dungeon(player->x, player->y))
-                sprintf(m, "You are outside in the wild, wild, world! ");
-        if(indungeon)
-                mess("You are inside a dark and scary dungeon!");*/
+        /*        if(outside && !has_dungeon(player->x, player->y))
+                  sprintf(m, "You are outside in the wild, wild, world! ");
+                  if(indungeon)
+                  mess("You are inside a dark and scary dungeon!");*/
 
         if(has_dungeon(player->x, player->y))
                 mess_color(TCOD_yellow, "You see a dungeon entrance.");
 
         if(has_objects(player->x, player->y)) {
                 o = world->cell[player->y][player->x].inventory;
-                for(i=0;i<world->cell[player->y][player->x].objects;i++) {
-                        if(ccell.inventory->type == OT_GOLD)
-                                yousee("%d pieces of gold here.", ccell.inventory->quantity);
-                        else
-                                yousee("%s %s here.", a_an(o->unidname), nouppercase(o->unidname));
-                }
+                //                for(i=0;i<world->cell[player->y][player->x].objects;i++) {
+                if(ccell.inventory->type == OT_GOLD)
+                        yousee("%d pieces of gold here.", ccell.inventory->quantity);
+                else
+                        yousee("%s %s here.", a_an(o->unidname), nouppercase(o->unidname));
+                //                }
         } else if(world->cell[player->y][player->x].monster) {
                 yousee("a %s here.", world->cell[player->y][player->x].monster->name);
         } else {

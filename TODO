@@ -2,3 +2,12 @@ config.h
 verdenssyn ( <- intelligens)
 sult
 
+
+VIKTIG:
+cell->inventory delvis fucked
+må fikse så det blir en orntli linket liste,
+som funker som player->inventory!
+(inventory=gold,inventory-next=1. objekt)
+displaykoden må ta hensyn til dette.
+og drop/pickup.
+

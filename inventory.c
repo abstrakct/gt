@@ -141,7 +141,6 @@ void movefromcelltoinventory(creature_t *creature, world_t *world)
 
         if(world->cell[creature->y][creature->x].type == OT_GOLD) {
                 creature->inventory->quantity += world->cell[creature->y][creature->x].inventory->quantity;
-                world->cell[creature->y][creature->x].objects--;
                 return;
         }
 
@@ -159,10 +158,11 @@ void movefromcelltoinventory(creature_t *creature, world_t *world)
         tmp2->next = tmp;
         tmp->prev = tmp2;
         you_c(TCOD_green, "pick up %s.", nouppercase(tmp->fullname));
-        world->cell[creature->y][creature->x].objects--;
         uppercase(tmp->fullname);
         assign_objlet(tmp);
         tmp->next = NULL;
+        free(tmp);
+        tmp = NULL;
 }
 
 void movefrominventorytocell(creature_t *creature, world_t *world, char c)
@@ -182,7 +182,6 @@ void movefrominventorytocell(creature_t *creature, world_t *world, char c)
         if(tmp->next)
                 tmp->next->prev = p;
 
-        world->cell[creature->y][creature->x].objects++;
         world->cell[creature->y][creature->x].inventory = tmp; 
 
         unassign_objlet(tmp);

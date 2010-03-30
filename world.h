@@ -38,21 +38,21 @@
 
 
 typedef struct {
-	int type;
+	char type;
 	TCOD_color_t color;
-        int explored;
         int flags;
         struct object *inventory;
-        int objects;         // num of objects here
         struct creature *monster;
 } cell_t;
 
-#define HAS_DUNGEON 0x0001
-#define HAS_EXIT    0x0002
+#define IS_EXPLORED 0x0001
+#define HAS_DUNGEON 0x0002
+#define HAS_EXIT    0x0004
 
+#define cell_explored(a) (a.flags & IS_EXPLORED)
 #define has_dungeon(x, y) (world->cell[y][x].flags & HAS_DUNGEON)
 #define has_exit(x, y) (world->dungeon.cell[y][x].flags & HAS_EXIT)
-#define has_objects(x, y) (world->cell[y][x].objects)
+#define has_objects(x, y) (world->cell[y][x].inventory)
 
 #define nextobjecthere world->cell[creature->y][creature->x].inventory
 #define ccell world->cell[player->y][player->x]
@@ -86,6 +86,7 @@ typedef struct {
         int forests, current_forest;
         int dungeons;
         int context;
+        struct creature *player;
 } world_t;
 
 #define CURRENT_CITY (world->city[world->current_city])
@@ -95,7 +96,7 @@ typedef struct {
 #define outside (world->context == CONTEXT_OUTSIDE)
 #define indungeon (world->context == CONTEXT_DUNGEON)
 #define hit_wall (world->dungeon.cell[player->y][player->x].type == D_WALL)
-#define set_explored_dungeon_cell(x, y) world->dungeon.cell[y][x].explored = true
+#define set_explored_dungeon_cell(x, y) world->dungeon.cell[y][x].flags |= IS_EXPLORED
 
 /* Prototypes */
 

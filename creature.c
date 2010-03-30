@@ -15,6 +15,7 @@
 #include "you.h"
 #include "display.h"
 #include "inventory.h"
+#include "attack.h"
 
 creature_t *mon;
 
@@ -182,16 +183,21 @@ void move_monsters(world_t *world, creature_t *player)
 
         tmp = mon->next;
         while(tmp != NULL) {
-                tmp->movement += tmp->speed;
-                while(tmp->movement >= 1.0) {
-                        world->cell[tmp->y][tmp->x].monster = NULL;
-                        tmp->ai(tmp, player);
-                        world->cell[tmp->y][tmp->x].monster = tmp;
-                        tmp->movement--;
+                if(tmp->attacker) {
+                        attack(tmp, player, world);
+                } else {
+                        tmp->movement += tmp->speed;
+                        while(tmp->movement >= 1.0) {
+                                world->cell[tmp->y][tmp->x].monster = NULL;
+                                tmp->ai(tmp, player);
+                                world->cell[tmp->y][tmp->x].monster = tmp;
+                                tmp->movement--;
+                        }
                 }
                 tmp = tmp->next;
         }
 }
+
 
 void init_monsters(world_t *world, player_t *player)
 {
@@ -260,14 +266,19 @@ int get_init_hp(player_t *player)
 
 void init_player(player_t *player, int x, int y)
 {
-        //memset(player, 0, sizeof(player_t));
+        int i;
         player->x = x;
         player->y = y;
         player->level = 1;
-
+        player->ac = 0;
+        player->next = player->prev = player->attacker = NULL;
         player->inventory = init_inventory(player->inventory);
         player->weapon = NULL;
         player->xp = 0;
+        player->w.head = player->w.body = player->w.gloves = player->w.footwear = player->w.robe = player->w.amulet = NULL;
+        for(i=0;i<10;i++)
+                player->w.ring[i] = NULL;
+
 
         if(!player->race)
                 player->race = ri(1, RACES);

@@ -20,3 +20,10 @@ v0.0.11: (2010-03-23)
 v0.0.11.1: (2010-03-28)
 * Hardcoded attacking/killing of monsters! You only do 1 point of damage right
 now, and the monster doesn't fight back.
+
+v0.0.11.2: (2010-03-29)
+* Monster now fights back after being attacked. Stupidly simple, but still, a
+a start.
+
+2010-03-30: Optimized the cell_t structure! Now we use considerably less
+memory!

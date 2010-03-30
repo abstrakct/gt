@@ -61,3 +61,27 @@ void yousee(char *fmt, ...)
         strcat(s2, s);
         mess(s2);
 }
+
+void gtprintf(char *fmt, ...)
+{
+        va_list argp;
+        char s[1000];
+
+        va_start(argp, fmt);
+        vsprintf(s, fmt, argp);
+        va_end(argp);
+
+        mess(s);
+}
+
+void gtprintfc(TCOD_color_t color, char *fmt, ...)
+{
+        va_list argp;
+        char s[1000];
+
+        va_start(argp, fmt);
+        vsprintf(s, fmt, argp);
+        va_end(argp);
+
+        mess_color(color, s);
+}
