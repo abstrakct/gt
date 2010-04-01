@@ -19,7 +19,7 @@ obj_t* init_inventory(obj_t *inventory);
 void init_player_inventory(player_t *player);
 void dump_inventory(obj_t *inventory);
 void cleanup_inventory(player_t *player);
-void wield(obj_t *what, player_t *player);
+void wieldwear(char what, player_t *creature);
 
 int letter_to_entry(char c);
 obj_t* get_obj_by_letter(char c);

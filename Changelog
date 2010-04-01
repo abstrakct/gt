@@ -27,3 +27,18 @@ a start.
 
 2010-03-30: Optimized the cell_t structure! Now we use considerably less
 memory!
+
+v0.0.12: (2010-04-01)
+* Inventory now works great for both player & cells, as well as multiple items
+on a cell!
+* Wands and rings get assigned a random material, so e.g. all wands of fire
+become "an iron wand" when unidentified.
+TODO: make identification work on a type of item, not just a single item!
+(so if you have identifed "iron wand" to be a wand of fire, that should work
+ for all iron wands.)
+
+v0.0.13: (2010-04-01)
+* More advanced attack system!
+* Weapons do different damage!
+* Armor can be worn!
+* AC has an effect!

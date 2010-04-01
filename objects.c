@@ -177,6 +177,14 @@ int wieldable(obj_t *obj)
                 return 0;
 }
 
+int wearable(obj_t *obj)
+{
+        if(obj->type == OT_ARMOR)
+               return 1;
+        else
+               return 0;
+} 
+
 void init_materials()
 {
         int i, j, count, mat;

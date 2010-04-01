@@ -310,4 +310,5 @@ void init_player(player_t *player, int x, int y)
         player->maxhp = player->hp;
         init_player_inventory(player);
         player->worldview = ri(0,2);
+        player->thac0 = (pdex/3) + (pstr/4);
 }

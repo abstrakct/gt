@@ -324,7 +324,37 @@ void dump_inventory(obj_t *inventory)
         }
 }
 
-void wield(obj_t *what, player_t *player)
+void wieldwear(char what, player_t *creature)
 {
-        player->weapon = what;
+        if(creature->inventory->next) {
+                if(what) {
+                        if(creature->weapon == get_obj_by_letter(what)) {
+                                you("unwield the %s", creature->weapon->basename); 
+                                creature->weapon->flags ^= OF_INUSE;
+                                creature->weapon = NULL;  // unwield it!
+                                return;
+                        }
+
+                        if(creature->w.body == get_obj_by_letter(what)) {
+                                you("take off the %s", creature->w.body->basename);
+                                creature->ac -= (creature->w.body->dsides + creature->w.body->modifier);
+                                creature->w.body->flags ^= OF_INUSE;
+                                creature->w.body = NULL;
+                                return;
+                        }
+
+                        if(wearable(get_obj_by_letter(what))) {
+                                creature->w.body = get_obj_by_letter(what);
+                                you("put on the %s", creature->w.body->basename);
+                                creature->ac += creature->w.body->dsides + creature->w.body->modifier;
+                                creature->w.body->flags |= OF_INUSE;
+                        }
+
+                        if(wieldable(get_obj_by_letter(what))) {
+                                creature->weapon = get_obj_by_letter(what);
+                                creature->weapon->flags |= OF_INUSE;
+                                you("wield the %s", creature->weapon->basename);
+                        }
+                }
+        }
 }

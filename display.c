@@ -334,12 +334,17 @@ int display_inventory(player_t *player)
         wielded = 0;
         o = player->inventory->next;
         while(o != NULL) {
-                if(o && o == player->weapon)
+/*                if(o && (o == player->weapon || o == player->w.body))
                         wielded = 1;
+                if(player->weapon == NULL)
+                        wielded = 0;
+                if(player->w.body == NULL)
+                        wielded = 0;*/
+
                 if(identified(o->flags))
-                        youwinprint(TCOD_white, "%c %s%s", o->c, wielded ? "* " : "- ", nouppercase(o->fullname));
+                        youwinprint(TCOD_white, "%c %s%s",    o->c, o->flags & OF_INUSE ? "* " : "- ", nouppercase(o->fullname));
                 else
-                        youwinprint(TCOD_white, "%c %s%s %s", o->c, wielded ? "* " : "- ", a_an(o->unidname), nouppercase(o->unidname));
+                        youwinprint(TCOD_white, "%c %s%s %s", o->c, o->flags & OF_INUSE ? "* " : "- ", a_an(o->unidname), nouppercase(o->unidname));
                 o = o->next;
                 wielded = 0;
                 ny++;

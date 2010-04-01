@@ -270,7 +270,7 @@ void init_fov_dungeon(world_t *world, TCOD_map_t fovmap)
 
 int dice(int num, int sides, signed int modifier)
 {
-        int retval, i;
+        signed int retval, i;
 
         retval = modifier;
         for(i=0;i<num;i++)
@@ -413,6 +413,8 @@ int main(int argc, char *argv[])
         int oldx, oldy;
         char wintitle[50];
         struct object *o;
+        char what;
+        
         //TCOD_heightmap_t *hm;
 
         rndgen = TCOD_random_new(TCOD_RNG_MT);
@@ -703,20 +705,10 @@ int main(int argc, char *argv[])
                                 mapchanged = 1;
                                 break;
                         case CMD_WIELD:
-                                if(player->inventory->next) {
-                                        char what;
-                                        what = askplayer("Which item to (un)wield?");
-                                        if(what) {
-                                                if(player->weapon == get_obj_by_letter(what))
-                                                        player->weapon = NULL;  // unwield it!
-
-                                                if(wieldable(get_obj_by_letter(what))) {
-                                                        player->weapon = get_obj_by_letter(what);
-                                                        //wield(get_obj_by_letter(what), player);
-                                                }
-                                        }
-                                }
+                                what = askplayer("Which item to (un)wield/wear?");
+                                wieldwear(what, player);
                                 mapchanged = 1;
+                                seenothing = 0;
                                 break;
                         case CMD_IDENTIFYALL:
                                 o = player->inventory->next;
