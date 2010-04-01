@@ -220,9 +220,7 @@ void move_monsters(world_t *world, creature_t *player)
         tmp = mon->next;
         while(tmp != NULL) {
                 if(tmp->attacker) {
-                        printf("i haz attakker!\n");
                         if(aisnexttob(tmp->attacker, tmp)) {
-                                printf("attaker is next to me! i attakcz!\n");
                                 attack(tmp, tmp->attacker, world);
                         } else {
                                 tmp->movement += tmp->speed;
@@ -256,10 +254,8 @@ void init_monsters(world_t *world, player_t *player)
         if(!mon)
                 die("memory allocation error!");
 
-        // let's populate the world!
-
         tmp = mon;
-        num = ri(50,150);
+        num = ri(XSIZE/8, YSIZE/4);
         printf("creating %d monsters..\n", num);
 
         for(i=0;i<num;i++) {
@@ -287,8 +283,6 @@ void init_monsters(world_t *world, player_t *player)
                         }
                 }
 
-
-
                 tmp->next = malloc(sizeof(creature_t));
                 if(!tmp->next)
                         die("memory allocation error!");
@@ -299,6 +293,13 @@ void init_monsters(world_t *world, player_t *player)
                 tmp->x = ri(0,XSIZE-1);
                 tmp->y = ri(0,YSIZE-1);
                 tmp->next = NULL;
+                tmp->attr.str += ri(-1,1);
+                tmp->attr.phys += ri(-1,1);
+                tmp->attr.intl += ri(-1,1);
+                tmp->attr.know += ri(-1,1);
+                tmp->attr.dex += ri(-1,1);
+                tmp->attr.cha += ri(-1,1);
+                tmp->thac0 = (tmp->attr.dex/3) + (tmp->attr.str/4);
                 world->cell[tmp->y][tmp->x].monster = tmp;
         }
 
@@ -314,12 +315,20 @@ int get_init_hp(player_t *player)
 
 void recalculate_worldview(player_t *player)
 {
+        int old;
+        old = player->worldview;
+
         if(player->wvfactor <= 45)
                 player->worldview = 0;
         if(player->wvfactor > 45 && player->wvfactor <= 70)
                 player->worldview = 1;
         if(player->wvfactor > 70)
                 player->worldview = 2;
+
+        if(old > player->worldview)
+                you_c(TCOD_light_green, "feel more optimistic!");
+        if(old < player->worldview)
+                you_c(TCOD_dark_red, "feel a bit more bummed than usual.");
 }
 void calculate_worldview(player_t *player)
 {
@@ -384,6 +393,5 @@ void init_player(player_t *player, int x, int y)
         player->maxhp = player->hp;
         init_player_inventory(player);
         calculate_worldview(player);
-
         player->thac0 = (pdex/3) + (pstr/4);
 }

@@ -376,16 +376,17 @@ void update_stats(int x, int y, world_t *world, player_t *player)
         youwinprint(TCOD_light_blue, "Level %d %s %s", player->level, races[player->race].name, classes[player->cla].name);
 
         uy++;
-        youwinprint(TCOD_green, "Life points:      / %d", player->maxhp);
+        youwinprint(TCOD_green, "Health points:      / %d", player->maxhp);
         if(player->hp >= perc(player->maxhp, 75))
                 TCOD_console_set_foreground_color(NULL, TCOD_green);
         if(player->hp >= perc(player->maxhp, 30) && player->hp < perc(player->maxhp, 75))
                 TCOD_console_set_foreground_color(NULL, TCOD_orange);
         if(player->hp >= 0 && player->hp < perc(player->maxhp, 30))
                 TCOD_console_set_foreground_color(NULL, TCOD_red);
-        TCOD_console_print_left(NULL, x+15, y+3, TCOD_BKGND_NONE, "%d", player->hp);
+        TCOD_console_print_left(NULL, x+16, y+3, TCOD_BKGND_NONE, "%d", player->hp);
 
         youwinprint(TCOD_green,  "Armor class:   %d", player->ac);
+        youwinprint(TCOD_green,  "THAC0:         %d", player->thac0);
         youwinprint(TCOD_green,  "Worldview:     %s", get_worldview_string(player));
         uy++;
         youwinprint(TCOD_yellow, "Experience:    %d", player->xp);

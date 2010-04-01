@@ -4,6 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <libtcod.h>
+#include <stdint.h>
 
 #include "objects.h"
 #include "gt.h"
@@ -34,7 +35,7 @@ void init_materials()
         for(i=FIRST_WAND;i<=LAST_WAND;i++) {
                 char tmp[100];
                 strcpy(tmp, objects[i].unidname);
-                sprintf(objects[i].unidname, "%s %s", matstr[objects[i].material], tmp);
+                sprintf(objects[i].unidname, "%s %s", matstr[(int)objects[i].material], tmp);
                 printf("%s is a %s\n", objects[i].fullname, objects[i].unidname);
         }
 
@@ -53,7 +54,7 @@ void init_materials()
         for(i=FIRST_RING;i<=LAST_RING;i++) {
                 char tmp[100];
                 strcpy(tmp, objects[i].unidname);
-                sprintf(objects[i].unidname, "%s %s", matstr[objects[i].material], tmp);
+                sprintf(objects[i].unidname, "%s %s", matstr[(int)objects[i].material], tmp);
                 printf("%s is a %s\n", objects[i].fullname, objects[i].unidname);
         }
 }

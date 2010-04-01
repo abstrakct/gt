@@ -50,7 +50,7 @@ void attack(struct creature *attacker, struct creature *attackee, world_t *world
         struct object *w;
 
         hit = dice(1, 20, 0); 
-        tohit = attacker->thac0 - attackee->ac;
+        tohit = attacker->thac0 - attackee->ac + (attacker->worldview+1);
         barehands = 0;
         w = attacker->weapon;
         if(!w) {

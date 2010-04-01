@@ -6,21 +6,21 @@
  */
 
 typedef struct {
-        signed short str;
-        signed short phys;
-        signed short intl;
-        signed short know;
-        signed short dex;
-        signed short cha;
+        signed char str;
+        signed char phys;
+        signed char intl;
+        signed char know;
+        signed char dex;
+        signed char cha;
 } sattr_t;
 
 typedef struct {
-        unsigned short str;
-        unsigned short phys;
-        unsigned short intl;
-        unsigned short know;
-        unsigned short dex;
-        unsigned short cha;
+        unsigned char str;
+        unsigned char phys;
+        unsigned char intl;
+        unsigned char know;
+        unsigned char dex;
+        unsigned char cha;
 } uattr_t;
 
 typedef struct {
