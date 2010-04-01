@@ -58,17 +58,21 @@ void draw_world_fov(int startx, int starty, player_t *player, int width, int hei
 
 
                         if(TCOD_map_is_in_fov(fovmap, i, j)) {
+                                TCOD_console_set_foreground_color(map_console, world->cell[j][i].color);
                                 if(world->cell[j][i].inventory) {
                                         obj_t *t;
-                                        //t = get_first_object(world->cell[j][i].inventory);
-                                        t = world->cell[j][i].inventory->next;
-                                        c = objchars[t->type];
-                                        TCOD_console_set_foreground_color(map_console, TCOD_white);
-                                } else if(world->cell[j][i].monster) {
+                                        t = get_first_object(world->cell[j][i].inventory);
+                                        if(t) {
+                                                c = objchars[t->type];
+                                                if(t->type == OT_GOLD)
+                                                        TCOD_console_set_foreground_color(map_console, TCOD_orange);
+                                                else
+                                                        TCOD_console_set_foreground_color(map_console, TCOD_white);
+                                        }
+                                }
+                                if(world->cell[j][i].monster) {
                                         c = world->cell[j][i].monster->c;
                                         TCOD_console_set_foreground_color(map_console, TCOD_white);
-                                } else {
-                                        TCOD_console_set_foreground_color(map_console, world->cell[j][i].color);
                                 }
                                 TCOD_console_put_char(map_console, dx, dy, c, TCOD_BKGND_NONE);
                         } else {

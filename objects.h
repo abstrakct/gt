@@ -41,6 +41,11 @@ extern char objchars[];
 #define OF_BAD        0x00000010
 #define OF_GOOD       0x00000020
 #define OF_INUSE      0x00000040
+#define OF_HEADARMOR  0x00000100
+#define OF_BODYARMOR  0x00000200
+#define OF_GLOVES     0x00000400
+#define OF_FOOTARMOR  0x00000800
+#define OF_SHIELD     0x00001000
 #define OF_DONOTUSE   0x20000000
 #define OF_HOLYFUCK   0x40000000
 
@@ -76,7 +81,11 @@ typedef struct obj_list obj_l;
 #define MAGIC_WEAPON(flags, base, unid, mod, ddice, dsides) OBJ(OT_WEAPON, OF_MAGIC | flags, 0, base, unid, mod, ddice, dsides)
 #define MAGIC_WEAPON_UNIQUE(flags, base, unid, mod, ddice, dsides) OBJ(OT_WEAPON, OF_MAGIC | flags, 1, base, unid, mod, ddice, dsides)
 
-#define ARMOR(flags, base, unid, ac) OBJ(OT_ARMOR, flags, 0, base, unid, 0, 0, ac)
+#define ARMOR(flags, base, unid, ac)  OBJ(OT_ARMOR, flags, 0, base, unid, 0, 0, ac)
+#define SHIELD(flags, base, unid, ac) OBJ(OT_ARMOR, flags | OF_SHIELD, 0, base, unid, 0, 0, ac)
+#define HEADARMOR(flags, base, unid, ac) OBJ(OT_ARMOR, flags | OF_HEADARMOR, 0, base, unid, 0, 0, ac)
+#define GLOVEARMOR(flags, base, unid, ac) OBJ(OT_ARMOR, flags | OF_GLOVES, 0, base, unid, 0, 0, ac)
+#define FOOTARMOR(flags, base, unid, ac) OBJ(OT_ARMOR, flags | OF_FOOTARMOR, 0, base, unid, 0, 0, ac)
 #define MAGIC_ARMOR(flags, base, unid, ac, mod) OBJ(OT_ARMOR, OF_MAGIC | flags, 0, base, unid, mod, 0, ac)
 #define CARD(flags, base, unid) OBJ(OT_CARD, OF_MAGIC | flags, 1, base, unid, 0, 0, 0)
 #define WAND(flags, base) OBJ(OT_WAND, OF_MAGIC | flags, 0, base, "wand", 0, 0, 0)
@@ -85,12 +94,18 @@ typedef struct obj_list obj_l;
 
 #define END_OBJECTS };
 
-#define is_magic(tmp) (tmp & OF_MAGIC)
-#define is_eatable(tmp) (tmp & OF_EATABLE)
-#define is_drinkable(tmp) (tmp & OF_DRINKABLE)
-#define identified(tmp) (tmp & OF_IDENTIFIED)
-#define is_holyfuck(tmp) (tmp & OF_HOLYFUCK)
-#define do_identify(tmp) tmp |= OF_IDENTIFIED
+
+#define is_magic(a)     (a & OF_MAGIC)
+#define is_eatable(a)   (a & OF_EATABLE)
+#define is_drinkable(a) (a & OF_DRINKABLE)
+#define identified(a)   (a & OF_IDENTIFIED)
+#define is_holyfuck(a)  (a & OF_HOLYFUCK)
+#define do_identify(a)   a |= OF_IDENTIFIED
+#define is_headwear(a)  (a & OF_HEADARMOR)
+#define is_footwear(a)  (a & OF_FOOTARMOR)
+#define is_bodywear(a)  (a & OF_BODYARMOR)
+#define is_gloves(a)    (a & OF_GLOVES)
+#define is_shield(a)    (a & OF_SHIELD)
 
 void init_objects();
 void init_materials();

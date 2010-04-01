@@ -260,11 +260,13 @@ void init_player_inventory(player_t *player)
         if(is_wizard) {
                 addbaseitemtoinventory(player, ri(FIRST_WAND, LAST_WAND));
                 addbaseitemtoinventory(player, ri(FIRST_WAND, LAST_WAND));
+                addbaseitemtoinventory(player, LEATHER_SHOES);
         }
 
         if(is_fighter) {
                 addbaseitemtoinventory(player, LONG_SWORD);
                 addbaseitemtoinventory(player, CHAIN_MAIL);
+                addbaseitemtoinventory(player, LEATHER_SHOES);
         }
 
         player->inventory->next->prev = player->inventory;
@@ -343,11 +345,72 @@ void wieldwear(char what, player_t *creature)
                                 return;
                         }
 
+                        if(creature->w.head == get_obj_by_letter(what)) {
+                                you("take off the %s", creature->w.head->basename);
+                                creature->ac -= (creature->w.head->dsides + creature->w.head->modifier);
+                                creature->w.head->flags ^= OF_INUSE;
+                                creature->w.head = NULL;
+                                return;
+                        }
+                        if(creature->w.gloves == get_obj_by_letter(what)) {
+                                you("take off the %s", creature->w.gloves->basename);
+                                creature->ac -= (creature->w.gloves->dsides + creature->w.gloves->modifier);
+                                creature->w.gloves->flags ^= OF_INUSE;
+                                creature->w.gloves = NULL;
+                                return;
+                        }
+                        if(creature->w.footwear == get_obj_by_letter(what)) {
+                                you("take off the %s", creature->w.footwear->basename);
+                                creature->ac -= (creature->w.footwear->dsides + creature->w.footwear->modifier);
+                                creature->w.footwear->flags ^= OF_INUSE;
+                                creature->w.footwear = NULL;
+                                return;
+                        }
+
                         if(wearable(get_obj_by_letter(what))) {
-                                creature->w.body = get_obj_by_letter(what);
-                                you("put on the %s", creature->w.body->basename);
-                                creature->ac += creature->w.body->dsides + creature->w.body->modifier;
-                                creature->w.body->flags |= OF_INUSE;
+                                struct object *tmp;
+                                tmp = get_obj_by_letter(what);
+                                if(is_bodywear(tmp->flags)) {
+                                        if(creature->w.body) {
+                                                gtprintfc(TCOD_red, "You must remove the %s before you can do that.", creature->w.body->basename);
+                                                return;
+                                        }
+                                        creature->w.body = tmp;
+                                        you("put on the %s", creature->w.body->basename);
+                                        creature->ac += creature->w.body->dsides + creature->w.body->modifier;
+                                        creature->w.body->flags |= OF_INUSE;
+                                } else if(is_footwear(tmp->flags)) {
+                                        if(creature->w.footwear) {
+                                                gtprintfc(TCOD_red, "You must take off the %s before you can do that.", creature->w.footwear->basename);
+                                                return;
+                                        }
+                                        creature->w.footwear = tmp;
+                                        you("put on the %s", creature->w.footwear->basename);
+                                        if((ri(0,100)) >= 59) {
+                                                // get the reference? *g*
+                                                mess("The shoes are too tight. You are unable to dance.");
+                                        }
+                                        creature->ac += creature->w.footwear->dsides + creature->w.footwear->modifier;
+                                        creature->w.footwear->flags |= OF_INUSE;
+                                } else if(is_gloves(tmp->flags)) {
+                                        if(creature->w.gloves) {
+                                                gtprintfc(TCOD_red, "You must take off the %s before you can do that.", creature->w.gloves->basename);
+                                                return;
+                                        }
+                                        creature->w.gloves = tmp;
+                                        you("put on the %s", creature->w.gloves->basename);
+                                        creature->ac += creature->w.gloves->dsides + creature->w.gloves->modifier;
+                                        creature->w.gloves->flags |= OF_INUSE;
+                                } else if(is_headwear(tmp->flags)) {
+                                        if(creature->w.head) {
+                                                gtprintfc(TCOD_red, "You must take off the %s before you can do that.", creature->w.head->basename);
+                                                return;
+                                        }
+                                        creature->w.head = tmp;
+                                        you("put on the %s", creature->w.head->basename);
+                                        creature->ac += creature->w.head->dsides + creature->w.head->modifier;
+                                        creature->w.head->flags |= OF_INUSE;
+                                }
                         }
 
                         if(wieldable(get_obj_by_letter(what))) {

@@ -8,9 +8,33 @@
 #include "creature.h"
 #include "you.h"
 
+int get_xp(struct creature *creature)
+{
+        int ret;
+
+        ret = creature->maxhp;
+        ret += creature->ac;
+        if(creature->attr.str >= 15)
+                ret += creature->attr.str - 13;
+        if(creature->attr.phys >= 15)
+                ret += creature->attr.phys - 13;
+        if(creature->attr.intl >= 15)
+                ret += creature->attr.intl - 13;
+        if(creature->attr.know >= 15)
+                ret += creature->attr.know - 13;
+        if(creature->attr.dex >= 15)
+                ret += creature->attr.dex - 13;
+        if(creature->attr.cha >= 15)
+                ret += creature->attr.cha - 13;
+
+        return ret;
+}
+
 void kill(struct creature *creature, world_t *world)
 {
         you_c(TCOD_green, "kill the %s!", creature->name);
+        world->player->xp += get_xp(creature);
+        you("get %d xp!", get_xp(creature));
         creature->prev->next = creature->next;
         creature->next->prev = creature->prev;
         world->cell[creature->y][creature->x].monster = NULL;
@@ -43,8 +67,10 @@ void attack(struct creature *attacker, struct creature *attackee, world_t *world
 
 //        printf("hit = %d\nthac0 = %d, ac = %d, tohit = %d\n", hit, attacker->thac0, attackee->ac, tohit);
         if(hit <= tohit) {
+                if(barehands)
+                       if(attacker == world->player)
+                               world->player->xp += 2;    // award some experience fore bare hands fighting
                 damage = dice(w->ddice, w->dsides, w->modifier);
-
                 attackee->hp -= damage;
                 if(attacker == world->player)
                         you_c(TCOD_green, "hit the %s for %d %s of damage!", attackee->name, damage, damage == 1 ? "point" : "points");
