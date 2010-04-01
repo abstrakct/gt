@@ -79,8 +79,8 @@ void attack(struct creature *attacker, struct creature *attackee, world_t *world
                 } else {
                         gtprintfc(TCOD_red, "The %s hits you for %d %s of damage!", attacker->name, damage, damage == 1 ? "point" : "points");
                         i = ri(1,100);
-                        if(i <= player->wvfactor)
-                                player->wvfactor++;
+                        if(i <= world->player->wvfactor)
+                                world->player->wvfactor++;
 
                 }
 
@@ -99,8 +99,8 @@ void attack(struct creature *attacker, struct creature *attackee, world_t *world
                 } else {
                         gtprintfc(TCOD_red, "The %s misses!", attacker->name, damage, damage == 1 ? "point" : "points");
                         i = ri(1,100);
-                        if(i >= player->wvfactor)
-                                player->wvfactor--;
+                        if(i >= world->player->wvfactor)
+                                world->player->wvfactor--;
                 }
         }
 
