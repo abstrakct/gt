@@ -164,8 +164,28 @@ void simpleoutdoorpathfinder(creature_t *creature, creature_t *player)
 
 void hostileai(creature_t *creature, creature_t *player)
 {
-        creature->goalx = player->x;
-        creature->goaly = player->y;
+        if(player->x >= (creature->x-10) && player->x <= creature->x+10 && player->y >= creature->y-10 && player->y <= creature->y+10) {
+                creature->goalx = player->x;
+                creature->goaly = player->y;
+
+                if(creature->x > creature->goalx)
+                        creature->x--;
+                if(creature->x < creature->goalx)
+                        creature->x++;
+                if(creature->y > creature->goaly)
+                        creature->y--;
+                if(creature->y < creature->goaly)
+                        creature->y++;
+        } else {
+                creature->attacker = NULL;
+                simpleoutdoorpathfinder(creature, player);
+        }
+}
+
+void movemonstertowards(struct creature *creature, struct creature *dest)
+{
+        creature->goalx = dest->x;
+        creature->goaly = dest->y;
 
         if(creature->x > creature->goalx)
                 creature->x--;
@@ -177,6 +197,22 @@ void hostileai(creature_t *creature, creature_t *player)
                 creature->y++;
 }
 
+
+int aisnexttob(struct creature *a, struct creature *b)
+{
+        if((a->x == b->x-1 && a->y == b->y) ||
+                        (a->x == b->x+1 && a->y == b->y) ||
+                        (a->y == b->y-1 && a->x == b->x) ||
+                        (a->y == b->y+1 && a->x == b->x) ||
+                        (a->x == b->x-1 && a->y == b->y-1) ||
+                        (a->x == b->x+1 && a->y == b->y+1) ||
+                        (a->x == b->x-1 && a->y == b->y+1) ||
+                        (a->x == b->x+1 && a->y == b->y-1))
+                return 1;
+        else
+                return 0;
+}
+
 void move_monsters(world_t *world, creature_t *player)
 {
         creature_t *tmp;
@@ -184,7 +220,19 @@ void move_monsters(world_t *world, creature_t *player)
         tmp = mon->next;
         while(tmp != NULL) {
                 if(tmp->attacker) {
-                        attack(tmp, player, world);
+                        printf("i haz attakker!\n");
+                        if(aisnexttob(tmp->attacker, tmp)) {
+                                printf("attaker is next to me! i attakcz!\n");
+                                attack(tmp, tmp->attacker, world);
+                        } else {
+                                tmp->movement += tmp->speed;
+                                while(tmp->movement >= 1.0) {
+                                        world->cell[tmp->y][tmp->x].monster = NULL;
+                                        hostileai(tmp, tmp->attacker);
+                                        world->cell[tmp->y][tmp->x].monster = tmp;
+                                        tmp->movement--;
+                                }
+                        }
                 } else {
                         tmp->movement += tmp->speed;
                         while(tmp->movement >= 1.0) {
@@ -264,10 +312,34 @@ int get_init_hp(player_t *player)
         return dice(1, 10, 10+hp_phys_adj[pphys]);
 }
 
+void recalculate_worldview(player_t *player)
+{
+        if(player->wvfactor <= 45)
+                player->worldview = 0;
+        if(player->wvfactor > 45 && player->wvfactor <= 70)
+                player->worldview = 1;
+        if(player->wvfactor > 70)
+                player->worldview = 2;
+}
+void calculate_worldview(player_t *player)
+{
+        // basically: the more intelligence and knowledge you have, the greater the
+        // chance that you are depressed.
+        // and the stupider you are, the happier you are!
+
+        player->wvfactor = (pintl*5 + pknow*5) / 2;
+
+        if(player->wvfactor <= 45)
+                player->worldview = 0;
+        if(player->wvfactor > 45 && player->wvfactor <= 70)
+                player->worldview = 1;
+        if(player->wvfactor > 70)
+                player->worldview = 2;
+}
+
 void init_player(player_t *player, int x, int y)
 {
         int i;
-        int wvfactor;
 
         player->x = x;
         player->y = y;
@@ -311,20 +383,7 @@ void init_player(player_t *player, int x, int y)
         player->hp = get_init_hp(player);
         player->maxhp = player->hp;
         init_player_inventory(player);
-
-        // basically: the more intelligence and knowledge you have, the greater the
-        // chance that you are depressed.
-        // and the stupider you are, the happier you are!
-
-        wvfactor = pintl*5 + pknow*5;
-        wvfactor /= 2;
-        if(wvfactor <= 45)
-                player->worldview = 0;
-        if(wvfactor > 45 && wvfactor <= 70)
-                player->worldview = 1;
-        if(wvfactor > 70)
-                player->worldview = 2;
-        player->wvfactor = wvfactor;
+        calculate_worldview(player);
 
         player->thac0 = (pdex/3) + (pstr/4);
 }

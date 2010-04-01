@@ -138,6 +138,7 @@ typedef struct {
 /* Prototypes */
 
 void init_player(player_t *player, int x, int y);
+void recalculate_worldview(player_t *player);
 
 /* AI */
 void defaultai(creature_t *creature, creature_t *player);

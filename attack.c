@@ -34,7 +34,8 @@ void kill(struct creature *creature, world_t *world)
 {
         you_c(TCOD_green, "kill the %s!", creature->name);
         world->player->xp += get_xp(creature);
-        you("get %d xp!", get_xp(creature));
+        world->player->wvfactor--;
+//        you("get %d xp!", get_xp(creature));
         creature->prev->next = creature->next;
         creature->next->prev = creature->prev;
         world->cell[creature->y][creature->x].monster = NULL;
@@ -44,7 +45,7 @@ void kill(struct creature *creature, world_t *world)
 void attack(struct creature *attacker, struct creature *attackee, world_t *world)
 {
         int damage = 1;
-        int hit;
+        int hit, i;
         int tohit, barehands;
         struct object *w;
 
@@ -66,16 +67,22 @@ void attack(struct creature *attacker, struct creature *attackee, world_t *world
                 tohit = 1;
 
 //        printf("hit = %d\nthac0 = %d, ac = %d, tohit = %d\n", hit, attacker->thac0, attackee->ac, tohit);
+//        printf("wvfactor = %d\tworldview = %d\n", world->player->wvfactor, world->player->worldview);
         if(hit <= tohit) {
                 if(barehands)
                        if(attacker == world->player)
                                world->player->xp += 2;    // award some experience fore bare hands fighting
                 damage = dice(w->ddice, w->dsides, w->modifier);
                 attackee->hp -= damage;
-                if(attacker == world->player)
+                if(attacker == world->player) {
                         you_c(TCOD_green, "hit the %s for %d %s of damage!", attackee->name, damage, damage == 1 ? "point" : "points");
-                else
+                } else {
                         gtprintfc(TCOD_red, "The %s hits you for %d %s of damage!", attacker->name, damage, damage == 1 ? "point" : "points");
+                        i = ri(1,100);
+                        if(i <= player->wvfactor)
+                                player->wvfactor++;
+
+                }
 
 
                 if(attackee->hp <= 0) {
@@ -87,12 +94,17 @@ void attack(struct creature *attacker, struct creature *attackee, world_t *world
                         }
                 }
         } else {
-                if(attacker == world->player)
+                if(attacker == world->player) {
                         you_c(TCOD_red, "miss the %s!", attackee->name);
-                else
+                } else {
                         gtprintfc(TCOD_red, "The %s misses!", attacker->name, damage, damage == 1 ? "point" : "points");
+                        i = ri(1,100);
+                        if(i >= player->wvfactor)
+                                player->wvfactor--;
+                }
         }
 
+        recalculate_worldview(world->player);
         if(barehands)
                 free(w);
 

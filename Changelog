@@ -45,3 +45,6 @@ v0.0.13: (2010-04-01)
 * AC has an effect!
 * We have gloves, footwear, headwear, shields and a whole lotta armor! (Thanks AD&D!)
 * Knowledge & intelligence now decides your worldview.
+* -- And it changes, primitively, based on your success in this life.
+* Monsters now chase the player, after being attacked. Unless the player outrun them,
+	of course!
