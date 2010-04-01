@@ -162,20 +162,57 @@ void simpleoutdoorpathfinder(creature_t *creature, creature_t *player)
         }
 }
 
+int aisnexttob(struct creature *a, struct creature *b)
+{
+        if(!a)
+                return 0;
+        if(!b)
+                return 0;
+                                
+        if((a->x == b->x-1 && a->y == b->y) ||
+                        (a->x == b->x+1 && a->y == b->y) ||
+                        (a->y == b->y-1 && a->x == b->x) ||
+                        (a->y == b->y+1 && a->x == b->x) ||
+                        (a->x == b->x-1 && a->y == b->y-1) ||
+                        (a->x == b->x+1 && a->y == b->y+1) ||
+                        (a->x == b->x-1 && a->y == b->y+1) ||
+                        (a->x == b->x+1 && a->y == b->y-1))
+                return 1;
+        else
+                return 0;
+}
+
 void hostileai(creature_t *creature, creature_t *player)
 {
         if(player->x >= (creature->x-10) && player->x <= creature->x+10 && player->y >= creature->y-10 && player->y <= creature->y+10) {
                 creature->goalx = player->x;
                 creature->goaly = player->y;
 
-                if(creature->x > creature->goalx)
+                if(creature->x > creature->goalx) {
                         creature->x--;
-                if(creature->x < creature->goalx)
+                        if(creature->y == player->y && creature->x == player->x)
+                                creature->x++;
+                }
+
+                if(creature->x < creature->goalx) {
                         creature->x++;
-                if(creature->y > creature->goaly)
+                        if(creature->y == player->y && creature->x == player->x)
+                                creature->x--;
+                }
+
+                if(creature->y > creature->goaly) {
                         creature->y--;
-                if(creature->y < creature->goaly)
+                        if(creature->y == player->y && creature->x == player->x)
+                                creature->y++;
+                }
+
+                if(creature->y < creature->goaly) {
                         creature->y++;
+                        if(creature->y == player->y && creature->x == player->x)
+                                creature->y--;
+                }
+
+
         } else {
                 creature->attacker = NULL;
                 simpleoutdoorpathfinder(creature, player);
@@ -198,20 +235,6 @@ void movemonstertowards(struct creature *creature, struct creature *dest)
 }
 
 
-int aisnexttob(struct creature *a, struct creature *b)
-{
-        if((a->x == b->x-1 && a->y == b->y) ||
-                        (a->x == b->x+1 && a->y == b->y) ||
-                        (a->y == b->y-1 && a->x == b->x) ||
-                        (a->y == b->y+1 && a->x == b->x) ||
-                        (a->x == b->x-1 && a->y == b->y-1) ||
-                        (a->x == b->x+1 && a->y == b->y+1) ||
-                        (a->x == b->x-1 && a->y == b->y+1) ||
-                        (a->x == b->x+1 && a->y == b->y-1))
-                return 1;
-        else
-                return 0;
-}
 
 void move_monsters(world_t *world, creature_t *player)
 {
@@ -229,6 +252,11 @@ void move_monsters(world_t *world, creature_t *player)
                                         hostileai(tmp, tmp->attacker);
                                         world->cell[tmp->y][tmp->x].monster = tmp;
                                         tmp->movement--;
+                                        if(aisnexttob(tmp->attacker, tmp)) {
+                                                attack(tmp, tmp->attacker, world);
+                                                return;
+                                        }
+
                                 }
                         }
                 } else {

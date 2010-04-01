@@ -8,6 +8,9 @@ START_MONSTERS
 MONSTER("kitty cat",      'f',   1,    9, simpleoutdoorpathfinder, 0.6,   3,   9,    9,    4,    18,  18,  3)
 MONSTER("grinning idiot", 'g',   1,    6, defaultai,               0.3,   4,   4,    1,    1,     4,   1,  2)
 MONSTER("orc",            'o',   1,    8, hostileai,               0.9,   12, 11,    8,    8,     7,   5,  6)
+MONSTER("rat",            'r',   1,    5, hostileai,               0.5,   4,   5,    2,    1,     9,   1,  4)
+MONSTER("wannabe demon",  '&',   1,    7, hostileai,               0.8,   10,  8,    6,    6,     9,   8,  5)
+MONSTER("goblin",         'G',   2,   13, hostileai,               1.0,   13, 12,   10,   10,     9,   7,  7)
 MONSTER("lava amoeba",    'a',   2,   12, defaultai,               0.1,   2,   3,    1,    1,     2,   1,  1)
 MONSTER("speed freak",    's',   2,   10, defaultai,               2.4,   12,  7,    4,    9,     9,   2,  5)
 MONSTER("silent creeper", 'c',   3,   19, hostileai,               0.7,   10, 12,   15,   10,    17,  11,  8)
@@ -16,6 +19,6 @@ MONSTER("zombie geesus",  'j', 100, 1000, simpleoutdoorpathfinder, 1.0,   18, 10
 
 END_MONSTERS
 
-#define NUM_MONSTERS 6
+#define NUM_MONSTERS 10
 
 #endif

@@ -72,7 +72,7 @@ void draw_world_fov(int startx, int starty, player_t *player, int width, int hei
                                 }
                                 if(world->cell[j][i].monster) {
                                         c = world->cell[j][i].monster->c;
-                                        TCOD_console_set_foreground_color(map_console, TCOD_white);
+                                        TCOD_console_set_foreground_color(map_console, TCOD_red);
                                 }
                                 TCOD_console_put_char(map_console, dx, dy, c, TCOD_BKGND_NONE);
                         } else {
@@ -138,7 +138,7 @@ void draw_world(int startx, int starty, player_t *player, int width, int height,
 
                         if(world->cell[j][i].monster) {
                                 c = world->cell[j][i].monster->c;
-                                TCOD_console_set_foreground_color(map_console, TCOD_white);
+                                TCOD_console_set_foreground_color(map_console, TCOD_red);
                         }
 
                         TCOD_console_put_char(map_console, dx, dy, c, TCOD_BKGND_NONE);
