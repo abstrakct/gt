@@ -39,7 +39,7 @@ class_t classes[CLASSES+1] = {  /* name, hp, phys, str, intl, know, dex, cha, mi
                 0, 0, 0, 0, 0, 0 },
         { "Fighter", 0,
                 2, 2, 0, 0, 0, 0,
-                13, 14, 7, 7, 9, 7},
+                13, 14, 4, 5, 9, 7},
         { "Wizard", 0, 
                 0, 0, 2, 2, 0, 0,
                 8, 8, 14, 8, 9, 8  }
@@ -267,6 +267,8 @@ int get_init_hp(player_t *player)
 void init_player(player_t *player, int x, int y)
 {
         int i;
+        int wvfactor;
+
         player->x = x;
         player->y = y;
         player->level = 1;
@@ -309,6 +311,20 @@ void init_player(player_t *player, int x, int y)
         player->hp = get_init_hp(player);
         player->maxhp = player->hp;
         init_player_inventory(player);
-        player->worldview = ri(0,2);
+
+        // basically: the more intelligence and knowledge you have, the greater the
+        // chance that you are depressed.
+        // and the stupider you are, the happier you are!
+
+        wvfactor = pintl*5 + pknow*5;
+        wvfactor /= 2;
+        if(wvfactor <= 45)
+                player->worldview = 0;
+        if(wvfactor > 45 && wvfactor <= 70)
+                player->worldview = 1;
+        if(wvfactor > 70)
+                player->worldview = 2;
+        player->wvfactor = wvfactor;
+
         player->thac0 = (pdex/3) + (pstr/4);
 }

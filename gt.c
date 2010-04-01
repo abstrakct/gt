@@ -19,6 +19,7 @@
 #include "you.h"
 #include "inventory.h"
 #include "attack.h"
+#include "materials.h"
 
 /* define this if development mode!! */
 #define DEVEL_MODE

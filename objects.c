@@ -14,10 +14,8 @@
 #include "world.h"
 #include "creature.h"
 #include "objlist.h"
-#include "objdefines.h"
 
 char objchars[] = { ')', '[', '=', '#', '/', '%', '$' };
-char *matstr[] = { 0, "golden", "silver", "bronze", "wooden", "iron", "copper", "marble", "glass", "bone", "platinum", "steel", "blackwood", "brass", "ebony" };
 int num_objects;
 
 void uppercase(char *s)
@@ -143,32 +141,6 @@ void moveobject(obj_t *src, obj_t *dest)
 }
 
 
-// move object src to inventory dest
-/*void moveobject(obj_t *src, obj_t *dest)
-{
-        obj_t *tmp;
-        obj_t *p;
-
-        tmp = dest;
-        if(!tmp->next) {
-                tmp->next = src;
-                tmp->prev = 0;
-        } 
-
-        while(tmp->next != NULL) {
-                p = tmp;
-                tmp = tmp->next;
-        }
-
-        tmp->next = src;
-        //tmp->next->prev = 
-        if(p)
-                p->next = tmp;
-        tmp->prev = p;
-        tmp->next->next = NULL;
-        tmp->next->prev = tmp;
-}*/
-
 int wieldable(obj_t *obj)
 {
         if(obj->type == OT_WEAPON)
@@ -185,49 +157,6 @@ int wearable(obj_t *obj)
                return 0;
 } 
 
-void init_materials()
-{
-        int i, j, count, mat;
-        srand(getpid());
-
-        mat = 1;
-        count = 0;
-        j = FIRST_WAND + (rand() % (LAST_WAND - FIRST_WAND + 1));
-        while(count <= (LAST_WAND-FIRST_WAND)) {
-                if(objects[j].material == 0) {
-                        objects[j].material = mat;
-                        mat++;
-                        count++;
-                }
-                j = FIRST_WAND + (rand() % (LAST_WAND - FIRST_WAND+1));
-        }
-        
-        for(i=FIRST_WAND;i<=LAST_WAND;i++) {
-                char tmp[100];
-                strcpy(tmp, objects[i].unidname);
-                sprintf(objects[i].unidname, "%s %s", matstr[objects[i].material], tmp);
-                printf("%s is a %s\n", objects[i].fullname, objects[i].unidname);
-        }
-
-        mat = 1;
-        count = 0;
-        j = FIRST_RING + (rand() % (LAST_RING - FIRST_RING + 1));
-        while(count <= (LAST_RING - FIRST_RING)) {
-                if(objects[j].material == 0) {
-                        objects[j].material = mat;
-                        mat++;
-                        count++;
-                }
-                j = FIRST_RING + (rand() % (LAST_RING - FIRST_RING + 1));
-        }
-
-        for(i=FIRST_RING;i<=LAST_RING;i++) {
-                char tmp[100];
-                strcpy(tmp, objects[i].unidname);
-                sprintf(objects[i].unidname, "%s %s", matstr[objects[i].material], tmp);
-                printf("%s is a %s\n", objects[i].fullname, objects[i].unidname);
-        }
-}
 
 void init_objects()
 {

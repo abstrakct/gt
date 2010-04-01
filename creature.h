@@ -41,6 +41,7 @@ struct creature {
         uattr_t attr;
         short level;
         short race, cla;
+        char wvfactor;
         short worldview;
         struct object *inventory;
         struct object *weapon;
@@ -76,7 +77,7 @@ typedef struct creature player_t;
 #define RIGHTPINKY 9
 
 #define START_MONSTERS creature_t monsters[] = {
-#define MONSTER(name, character, level, hp, ai, speed, str, phys, intl, know, dex, cha, tohit) { 0, 0, hp, hp, 0, 0, { str, phys, intl, know, dex, cha }, level, 0, 0, 0, 0, 0, { 0,0,0,0,0,0, {0,0,0,0,0,0,0,0,0,0} }, 0, name, character, speed, 0, {0,0,0}, ai, 0, 0, 0, 0, 0, 0, tohit},
+#define MONSTER(name, character, level, hp, ai, speed, str, phys, intl, know, dex, cha, tohit) { 0, 0, hp, hp, 0, 0, { str, phys, intl, know, dex, cha }, level, 0, 0, 0, 0, 0, 0, { 0,0,0,0,0,0, {0,0,0,0,0,0,0,0,0,0} }, 0, name, character, speed, 0, {0,0,0}, ai, 0, 0, 0, 0, 0, 0, tohit},
 #define END_MONSTERS };
 
 
