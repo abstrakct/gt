@@ -182,29 +182,25 @@ void generate_area(int num, int type, int maxsize, int modifier, world_t *world)
         }
 }
 
-void addgoldtoworldcell(world_t *world, int x, int y, int i)
+void addgoldtoworldcell(world_t *world, int x, int y, int max)
 {
-        obj_t *tmp, *first;
+        obj_t *tmp;
 
         tmp = world->cell[y][x].inventory;
-        first = tmp;
-
-        while(tmp != NULL) {
-                first = tmp;
-                tmp = tmp->next;
+        if(!tmp) {
+                tmp = malloc(sizeof(struct object));
+                if(!tmp)
+                        die("memory allocation failed!");
         }
-
-        tmp = malloc(sizeof(obj_t));
-        if(!tmp)
-                die("memory allcation failed!");
-
-        if(first)
-                first->next = tmp;
-
-        tmp->prev = first;
+        tmp->prev = NULL;
         tmp->next = NULL;
         tmp->type = OT_GOLD;
-        tmp->quantity = ri(1, 200);
+
+        if(!max)
+                tmp->quantity = 0;
+        else
+                tmp->quantity = ri(1, max);
+
         world->cell[y][x].inventory = tmp;
 }
 
@@ -231,13 +227,13 @@ void addbaseitemtoworldcell(world_t *world, int x, int y, int i)
         *tmp = objects[i];
         tmp->prev = first;
         tmp->next = NULL;
-        world->cell[y][x].inventory = tmp;
+        world->cell[y][x].inventory->next = tmp;
 }
 
 
 void generate_world(world_t *world)
 {
-        int i,j,color,items;
+        int i,j,color,items,x,y;
         TCOD_color_t plaincolors[3] = { COLOR_PLAIN1, COLOR_PLAIN2, COLOR_PLAIN3 };
 
         world->cities = world->villages = world->forests = world->dungeons = 0;
@@ -249,6 +245,7 @@ void generate_world(world_t *world)
                         color = ri(0,2);
                         world->cell[j][i].color = plaincolors[color];
                         world->cell[j][i].monster = NULL;
+                        world->cell[j][i].inventory = NULL;
                 }
         }
 
@@ -279,17 +276,23 @@ void generate_world(world_t *world)
 
                 if(objects[j].unique) {
                         if(objects[j].quantity<=1) {
-                                addbaseitemtoworldcell(world, ri(0, XSIZE-1), ri(0, YSIZE-1), j);
+                                x = ri(0,XSIZE-1);
+                                y = ri(0,YSIZE-1);
+                                addgoldtoworldcell(world, x, y, 0);       // add a dummy base gold item thingy
+                                addbaseitemtoworldcell(world, x, y, j);
                                 objects[j].quantity++;
                                 printf("added %s to the world\n", objects[j].fullname);
                         }
                 } else {
-                        addbaseitemtoworldcell(world, ri(0, XSIZE-1), ri(0, YSIZE-1), j);
+                        x = ri(0,XSIZE-1);
+                        y = ri(0,YSIZE-1);
+                        addgoldtoworldcell(world, x, y, 0);       // add a dummy base gold item thingy
+                        addbaseitemtoworldcell(world, x, y, j);
                         //printf("added %s to the world\n", objects[j].fullname);
                 }
 
                 if(ri(1,100) >= 50) {
-                        addgoldtoworldcell(world, ri(0, XSIZE-1), ri(0, YSIZE-1), j);
+                        addgoldtoworldcell(world, ri(0, XSIZE-1), ri(0, YSIZE-1), 200);
                         //printf("adding some gold!\n");
                 }
         }

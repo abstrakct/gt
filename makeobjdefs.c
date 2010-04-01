@@ -12,6 +12,8 @@
 extern int num_objects;
 extern obj_t objects[];
 
+#define INMAKEOBJDEFS
+
 int main()
 {
         FILE *f;

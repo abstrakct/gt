@@ -121,6 +121,11 @@ obj_t* get_last_object(obj_t *start)
 
 struct object* get_first_object(obj_t *start)
 {
+        if(start->type == OT_GOLD && start->quantity)
+                return start;
+        if(start->type == OT_GOLD && start->quantity == 0)
+                return start->next;
+
         if(start->next)
                 return start->next;
         else
@@ -135,57 +140,90 @@ struct object* get_first_object_here(world_t *world, struct creature *creature)
         return 0;
 }
 
-void movefromcelltoinventory(creature_t *creature, world_t *world)
+int movefromcelltoinventory(creature_t *creature, world_t *world)
 {
-        obj_t *tmp, *tmp2;
+        struct object *lastinpi, *previnpi, *which;
 
-        if(world->cell[creature->y][creature->x].type == OT_GOLD) {
-                creature->inventory->quantity += world->cell[creature->y][creature->x].inventory->quantity;
-                return;
+#define cellinv world->cell[creature->y][creature->x].inventory
+
+        if(cellinv->type == OT_GOLD && cellinv->quantity) {
+                creature->inventory->quantity += cellinv->quantity;
+                cellinv->quantity = 0;
+                return 0;
         }
 
-        tmp = creature->inventory->next;
-        if(tmp) {
-                while(tmp != NULL) {
-                        tmp2 = tmp;
-                        tmp = tmp->next;
+        which = nextobjecthere->next;
+        if(!which)  // nothing here
+                return 1;
+
+        lastinpi = creature->inventory->next;
+        if(lastinpi) {
+                while(lastinpi != NULL) {
+                        previnpi = lastinpi;
+                        lastinpi = lastinpi->next;
                 }
         } else {
-                tmp2 = creature->inventory;
+                previnpi = creature->inventory;
         }
 
-        tmp = nextobjecthere;
-        tmp2->next = tmp;
-        tmp->prev = tmp2;
-        you_c(TCOD_green, "pick up %s.", nouppercase(tmp->fullname));
-        uppercase(tmp->fullname);
-        assign_objlet(tmp);
-        tmp->next = NULL;
-        free(tmp);
-        tmp = NULL;
+        lastinpi = which;
+        lastinpi->prev = previnpi;
+        lastinpi->prev->next = lastinpi;
+
+        cellinv->next = cellinv->next->next;
+        cellinv->prev = cellinv;
+
+
+        you_c(TCOD_green, "pick up %s %s.", identified(which->flags) ? a_an(which->fullname) : a_an(which->unidname), identified(which->flags) ? nouppercase(which->fullname) : nouppercase(which->unidname));
+        uppercase(which->fullname);
+        assign_objlet(which);
+        return 0;
 }
 
-void movefrominventorytocell(creature_t *creature, world_t *world, char c)
+void movefrominventorytocell(player_t *creature, world_t *world, char c)
 {
-        obj_t *tmp, *p;
+        struct object *previnpi;
+        struct object *nextinpi;
+        struct object *which;
+        struct object *o, *t;
 
+        which = get_obj_by_letter(c);
+#define cellinv world->cell[creature->y][creature->x].inventory
 
-        tmp = get_obj_by_letter(c);
-        if(tmp == creature->inventory->next) {
-                //this is the first item in the inventory
-                tmp->prev = creature->inventory;
+        if(!cellinv) {  // has no inventory yet? allocate one then.
+                cellinv = malloc(sizeof(struct object));
+                cellinv->type = OT_GOLD;
+                cellinv->quantity = 0;
+                cellinv->next = cellinv->prev = NULL;
         }
 
-        p = tmp->prev;
-        if(p)
-                p->next = tmp->next;
-        if(tmp->next)
-                tmp->next->prev = p;
+        previnpi = which->prev;
+        nextinpi = which->next;
 
-        world->cell[creature->y][creature->x].inventory = tmp; 
+        o = cellinv->next;
+        t = cellinv;
+        while(o) {
+                t = o;
+                o = o->next;
+        }
 
-        unassign_objlet(tmp);
-        you_c(TCOD_green, "drop %s.", nouppercase(tmp->fullname));
+        o = which;
+        o->next = NULL;
+        o->prev = t;
+        t->next = o;
+
+        unassign_objlet(which);
+        you_c(TCOD_green, "drop %s.", nouppercase(which->fullname));
+}
+
+
+void movenode(struct object **source, struct object **dest)
+{
+        struct object *o = *source;
+
+        *source = o->next;
+        o->next = *dest;
+        *dest = o;
 }
 
 obj_t* init_inventory(obj_t *inventory)
@@ -229,9 +267,7 @@ void init_player_inventory(player_t *player)
                 addbaseitemtoinventory(player, CHAIN_MAIL);
         }
 
-        player->inventory->next->prev = NULL;  // because the first in the list has no prev
-        // but the first (player->inventory) is used to hold GOLD!
-
+        player->inventory->next->prev = player->inventory;
         player->inventory->type = OT_GOLD;
         player->inventory->quantity = ri(0, 50);
 

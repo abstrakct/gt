@@ -412,9 +412,10 @@ int main(int argc, char *argv[])
         world_t *world;
         int oldx, oldy;
         char wintitle[50];
+        struct object *o;
         //TCOD_heightmap_t *hm;
 
-        rndgen = TCOD_random_new(TCOD_RNG_CMWC);
+        rndgen = TCOD_random_new(TCOD_RNG_MT);
 
         player = malloc(sizeof(player_t));
         if(!player)
@@ -430,6 +431,7 @@ int main(int argc, char *argv[])
 #endif
 
         init_objects();
+        init_materials();
         init_player(player, XSIZE/2, YSIZE/2);
 
         world = malloc(sizeof(world_t));
@@ -671,17 +673,16 @@ int main(int argc, char *argv[])
                                 break;
                         case CMD_PICKUP:
                                 if(ccell.inventory) {
-                                        if(ccell.inventory->type == OT_GOLD) {
-                                                player->inventory->quantity += ccell.inventory->quantity;
+                                        if(ccell.inventory->type == OT_GOLD && ccell.inventory->quantity) {
                                                 you_c(TCOD_green, "pick up %d pieces of gold.", ccell.inventory->quantity);
-                                                ccell.inventory->quantity = 0;
-                                                free(ccell.inventory);
-                                                ccell.inventory = NULL;
-                                        } else {
-                                                movefromcelltoinventory(player, world);
                                                 seenothing = 0;
-                                                cleanup_inventory(player);
+                                        } else {
+                                                seenothing = 0;
                                         }
+                                        if(movefromcelltoinventory(player, world))
+                                                you_c(TCOD_red, "%s", WV_PICKUPNOTHING);
+
+                                        cleanup_inventory(player);
                                 } else {
                                         you_c(TCOD_red, "%s", WV_PICKUPNOTHING);
                                         seenothing = 0;
@@ -692,8 +693,9 @@ int main(int argc, char *argv[])
                                 if(player->inventory->next) {
                                         char dropwhat;
                                         dropwhat = askplayer("Drop which item?");
-                                        if(dropwhat)
+                                        if(dropwhat) {
                                                 movefrominventorytocell(player, world, dropwhat);
+                                        }
                                         cleanup_inventory(player);
                                 } else {
                                         you_c(TCOD_red, "%s", WV_NOTHINGLEFT);
@@ -715,6 +717,15 @@ int main(int argc, char *argv[])
                                         }
                                 }
                                 mapchanged = 1;
+                                break;
+                        case CMD_IDENTIFYALL:
+                                o = player->inventory->next;
+                                while(o!=NULL) {
+                                        o->flags |= OF_IDENTIFIED;
+                                        o = o->next;
+                                }
+                                mapchanged = 1;
+                                break;
                         default:
                                 break;
                 }

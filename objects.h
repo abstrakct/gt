@@ -16,8 +16,9 @@ struct object {
         char unidname[100];     // unidentified name
         char fullname[100];     // should be more than enough, adjust later
         char c;
-        short minlevel;
+        char minlevel;
         short quantity;
+        char material;
 };
 
 typedef struct object obj_t;
@@ -41,6 +42,22 @@ extern char objchars[];
 #define OF_DONOTUSE   0x20000000
 #define OF_HOLYFUCK   0x40000000
 
+#define MAT_GOLD 1
+#define MAT_SILVER 2
+#define MAT_BRONZE 3
+#define MAT_WOOD 4
+#define MAT_IRON 5
+#define MAT_COPPER 6
+#define MAT_MARBLE 7
+#define MAT_GLASS 8
+#define MAT_BONE 9
+#define MAT_PLATINUM 10
+#define MAT_STEEL 11
+#define MAT_BLACKWOOD 12
+#define MAT_BRASS 13
+#define MAT_EBONY 14
+#define MATERIALS 14
+
 struct obj_list {
         obj_t *object;
         struct obj_list *next;
@@ -50,7 +67,7 @@ typedef struct obj_list obj_l;
 
 #define START_OBJECTS obj_t objects[] = {
 
-#define OBJ(type, flags, unique, base, unid, mod) { 0, 0, type, flags, unique, mod, base, unid, "\0", 0, 1, 1 },
+#define OBJ(type, flags, unique, base, unid, mod) { 0, 0, type, flags, unique, mod, base, unid, "\0", 0, 1, 1, 0},
 
 #define WEAPON(flags, base, unid) OBJ(OT_WEAPON, flags, 0, base, unid, 0)
 #define WEAPON_UNIQUE(flags, base, unid, mod) OBJ(OT_WEAPON, flags, 1, base, unid, mod)
@@ -74,6 +91,7 @@ typedef struct obj_list obj_l;
 #define do_identify(tmp) tmp |= OF_IDENTIFIED
 
 void init_objects();
+void init_materials();
 char *get_def_name(obj_t object);
 char *a_an(char *s);
 void uppercase(char *s);

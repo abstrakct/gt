@@ -33,6 +33,7 @@ cmd_t outsidecommands[] = {
         { { TCODK_F6,       0, 1, 0, 0, 0, 0, 0 }, CMD_LOAD, "Load" },
         { { TCODK_CHAR,   'e', 1, 0, 0, 0, 0, 0 }, CMD_ENTERDUNGEON, "Enter dungeon" },
         { { TCODK_CHAR,   'w', 1, 0, 0, 0, 0, 0 }, CMD_WIELD, "Wield/wear" },
+        { { TCODK_CHAR,   'i', 1, 0, 0, 0, 0, 0 }, CMD_IDENTIFYALL, "Identify everything" },
 };
 
 cmd_t dungeoncommands[] = {

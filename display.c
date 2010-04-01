@@ -123,8 +123,13 @@ void draw_world(int startx, int starty, player_t *player, int width, int height,
                         if(world->cell[j][i].inventory) {
                                 obj_t *t;
                                 t = get_first_object(world->cell[j][i].inventory);
-                                c = objchars[t->type];
-                                TCOD_console_set_foreground_color(map_console, TCOD_white);
+                                if(t) {
+                                        c = objchars[t->type];
+                                        if(t->type == OT_GOLD)
+                                                TCOD_console_set_foreground_color(map_console, TCOD_orange);
+                                        else
+                                                TCOD_console_set_foreground_color(map_console, TCOD_white);
+                                }
                         }
 
                         if(world->cell[j][i].monster) {
@@ -283,12 +288,17 @@ void update_info(int x, int y, world_t *world, player_t *player, bool seenothing
 
         if(has_objects(player->x, player->y)) {
                 o = world->cell[player->y][player->x].inventory;
-                //                for(i=0;i<world->cell[player->y][player->x].objects;i++) {
-                if(ccell.inventory->type == OT_GOLD)
-                        yousee("%d pieces of gold here.", ccell.inventory->quantity);
-                else
-                        yousee("%s %s here.", a_an(o->unidname), nouppercase(o->unidname));
-                //                }
+                while(o != NULL) {
+                        if(o->type == OT_GOLD && o->quantity)
+                                yousee("%d %s of gold here.", o->quantity, o->quantity > 1 ? "pieces" : "piece");
+                        if(o->type != OT_GOLD) {
+                                if(identified(o->flags))
+                                        yousee("%s %s here.", a_an(o->fullname), nouppercase(o->fullname));
+                                else
+                                        yousee("%s %s here.", a_an(o->unidname), nouppercase(o->unidname));
+                        }
+                        o = o->next;
+                }
         } else if(world->cell[player->y][player->x].monster) {
                 yousee("a %s here.", world->cell[player->y][player->x].monster->name);
         } else {
