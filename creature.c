@@ -387,9 +387,10 @@ void init_player(player_t *player, int x, int y)
         player->weapon = NULL;
         player->xp = 0;
         player->w.head = player->w.body = player->w.gloves = player->w.footwear = player->w.robe = player->w.amulet = NULL;
-        for(i=0;i<10;i++)
+        for(i=0;i<10;i++) {
+                player->skill[i] = 0.0;
                 player->w.ring[i] = NULL;
-
+        }
 
         if(!player->race)
                 player->race = ri(1, RACES);

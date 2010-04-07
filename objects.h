@@ -20,6 +20,7 @@ struct object {
         short quantity;
         char material;
         char ddice, dsides;
+        char skill;             // a particular skill needed to use this weapon?
 };
 
 typedef struct object obj_t;
@@ -74,7 +75,7 @@ typedef struct obj_list obj_l;
 
 #define START_OBJECTS obj_t objects[] = {
 
-#define OBJ(type, flags, unique, base, unid, mod, ddice, dsides) { 0, 0, type, flags, unique, mod, base, unid, "\0", 0, 1, 1, 0, ddice, dsides},
+#define OBJ(type, flags, unique, base, unid, mod, ddice, dsides) { 0, 0, type, flags, unique, mod, base, unid, "\0", 0, 1, 1, 0, ddice, dsides, 0},
 
 #define WEAPON(flags, base, unid, ddice, dsides) OBJ(OT_WEAPON, flags, 0, base, unid, 0, ddice, dsides)
 #define WEAPON_UNIQUE(flags, base, unid, mod, ddice, dsides) OBJ(OT_WEAPON, flags, 1, base, unid, mod, ddice, dsides)

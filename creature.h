@@ -59,6 +59,7 @@ struct creature {
         struct creature *next;
         struct creature *attacker;
         short thac0;
+        float skill[10];
 };
 
 typedef struct creature creature_t;
@@ -76,8 +77,13 @@ typedef struct creature player_t;
 #define RIGHTRINGF 8
 #define RIGHTPINKY 9
 
+/* skills */
+#define SK_NOSKILL   0
+#define SK_BAREHANDS 1
+
+
 #define START_MONSTERS creature_t monsters[] = {
-#define MONSTER(name, character, level, hp, ai, speed, str, phys, intl, know, dex, cha, tohit) { 0, 0, hp, hp, 0, 0, { str, phys, intl, know, dex, cha }, level, 0, 0, 0, 0, 0, 0, { 0,0,0,0,0,0, {0,0,0,0,0,0,0,0,0,0} }, 0, name, character, speed, 0, {0,0,0}, ai, 0, 0, 0, 0, 0, 0, tohit},
+#define MONSTER(name, character, level, hp, ai, speed, str, phys, intl, know, dex, cha, tohit) { 0, 0, hp, hp, 0, 0, { str, phys, intl, know, dex, cha }, level, 0, 0, 0, 0, 0, 0, { 0,0,0,0,0,0, {0,0,0,0,0,0,0,0,0,0} }, 0, name, character, speed, 0, {0,0,0}, ai, 0, 0, 0, 0, 0, 0, tohit, {0,0,0,0,0,0,0,0,0,0}},
 #define END_MONSTERS };
 
 

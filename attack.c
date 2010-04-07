@@ -50,7 +50,10 @@ void attack(struct creature *attacker, struct creature *attackee, world_t *world
         struct object *w;
 
         hit = dice(1, 20, 0); 
-        tohit = attacker->thac0 - attackee->ac + (attacker->worldview+1);
+        tohit  = attacker->thac0;
+        tohit -= attackee->ac;
+        tohit += (attacker->worldview+1);
+
         barehands = 0;
         w = attacker->weapon;
         if(!w) {
@@ -59,10 +62,14 @@ void attack(struct creature *attacker, struct creature *attackee, world_t *world
                 w->ddice = 1;
                 w->dsides = 4;
                 w->modifier = 0;
+                w->skill = SK_BAREHANDS;
                 barehands = 1;
+                attacker->weapon = w;
         }
 
         tohit += w->modifier;
+        tohit += (int) attacker->skill[attacker->weapon->skill];
+
         if(tohit < 1)
                 tohit = 1;
 
@@ -84,6 +91,11 @@ void attack(struct creature *attacker, struct creature *attackee, world_t *world
 
                 }
 
+                if(attacker->weapon->skill) {
+                        attacker->skill[attacker->weapon->skill] += 0.1;
+//                        gtprintf("%s - skill is now %f", attacker->name, attacker->skill[attacker->weapon->skill]);
+                }
+
 
                 if(attackee->hp <= 0) {
                         if(attacker == world->player) {
@@ -102,11 +114,22 @@ void attack(struct creature *attacker, struct creature *attackee, world_t *world
                         if(i >= world->player->wvfactor)
                                 world->player->wvfactor--;
                 }
+
+                if(attacker->weapon->skill) {
+                        i = ri(1,100);
+                        if(i<=(50+attacker->attr.intl)) {
+                                attacker->skill[attacker->weapon->skill] += 0.1;
+//                                gtprintf("%s - skill is now %f", attacker->name, attacker->skill[attacker->weapon->skill]);
+                        }
+                }
+
         }
 
         recalculate_worldview(world->player);
-        if(barehands)
+        if(barehands) {
+                attacker->weapon = NULL;
                 free(w);
+        }
 
         return;
 }
