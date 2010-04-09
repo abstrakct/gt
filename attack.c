@@ -68,7 +68,7 @@ void attack(struct creature *attacker, struct creature *attackee, world_t *world
         }
 
         tohit += w->modifier;
-        tohit += (int) attacker->skill[attacker->weapon->skill];
+        tohit += (int) attacker->skill[(int)attacker->weapon->skill];
 
         if(tohit < 1)
                 tohit = 1;
@@ -92,7 +92,7 @@ void attack(struct creature *attacker, struct creature *attackee, world_t *world
                 }
 
                 if(attacker->weapon->skill) {
-                        attacker->skill[attacker->weapon->skill] += 0.1;
+                        attacker->skill[(int)attacker->weapon->skill] += 0.1;
 //                        gtprintf("%s - skill is now %f", attacker->name, attacker->skill[attacker->weapon->skill]);
                 }
 
@@ -118,7 +118,7 @@ void attack(struct creature *attacker, struct creature *attackee, world_t *world
                 if(attacker->weapon->skill) {
                         i = ri(1,100);
                         if(i<=(50+attacker->attr.intl)) {
-                                attacker->skill[attacker->weapon->skill] += 0.1;
+                                attacker->skill[(int)attacker->weapon->skill] += 0.1;
 //                                gtprintf("%s - skill is now %f", attacker->name, attacker->skill[attacker->weapon->skill]);
                         }
                 }

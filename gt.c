@@ -707,7 +707,8 @@ int main(int argc, char *argv[])
                                 break;
                         case CMD_WIELD:
                                 what = askplayer("Which item to (un)wield/wear?");
-                                wieldwear(what, player);
+                                o = get_obj_by_letter(what);
+                                wieldwear(o, player, 1);
                                 mapchanged = 1;
                                 seenothing = 0;
                                 break;

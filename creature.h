@@ -78,12 +78,15 @@ typedef struct creature player_t;
 #define RIGHTPINKY 9
 
 /* skills */
-#define SK_NOSKILL   0
-#define SK_BAREHANDS 1
+#define SK_NOSKILL    0
+#define SK_BAREHANDS  1
+#define SK_LONGSWORD  2
+#define SK_SHORTSWORD 3
+#define SK_BATTLEAXE  4
 
 
 #define START_MONSTERS creature_t monsters[] = {
-#define MONSTER(name, character, level, hp, ai, speed, str, phys, intl, know, dex, cha, tohit) { 0, 0, hp, hp, 0, 0, { str, phys, intl, know, dex, cha }, level, 0, 0, 0, 0, 0, 0, { 0,0,0,0,0,0, {0,0,0,0,0,0,0,0,0,0} }, 0, name, character, speed, 0, {0,0,0}, ai, 0, 0, 0, 0, 0, 0, tohit, {0,0,0,0,0,0,0,0,0,0}},
+#define MONSTER(name, character, level, hp, ai, speed, str, phys, intl, know, dex, cha, tohit, flags) { 0, 0, hp, hp, 0, 0, { str, phys, intl, know, dex, cha }, level, 0, 0, 0, 0, 0, 0, { 0,0,0,0,0,0, {0,0,0,0,0,0,0,0,0,0} }, flags, name, character, speed, 0, {0,0,0}, ai, 0, 0, 0, 0, 0, 0, tohit, {0,0,0,0,0,0,0,0,0,0}},
 #define END_MONSTERS };
 
 
@@ -94,6 +97,13 @@ typedef struct creature player_t;
 #define CLASS_FIGHTER 1
 #define CLASS_WIZARD  2
 #define CLASSES 2
+
+/* monster flags! */
+
+#define MF_ISHOSTILE    0x00000001
+#define MF_CANUSEWEAPON 0x00000002
+#define MF_CANUSEARMOR  0x00000004
+#define MF_CANHAVEGOLD  0x00000008
 
 
 typedef struct {

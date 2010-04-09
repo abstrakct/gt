@@ -48,3 +48,6 @@ v0.0.13: (2010-04-01)
 * -- And it changes, primitively, based on your success in this life.
 * Monsters now chase the player, after being attacked. Unless the player outrun them,
 	of course!
+* 2010-04-07: Added rudimentary (weapon) skills
+* 2010-04-09: Added monster inventory, monster flags, monsters can use weapons
+and armor!!

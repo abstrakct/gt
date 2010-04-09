@@ -107,6 +107,66 @@ void addbaseitemtoinventory(player_t *player, int i)
         tmp->flags |= OF_IDENTIFIED;
 }
 
+void addrandomnormalweapontoinventory(struct creature *c)
+{
+        obj_t *tmp;
+        obj_t *first;
+        int i;
+
+        tmp = c->inventory;
+        first = tmp;
+
+        while(tmp != NULL) {
+                first = tmp;
+                tmp = tmp->next;
+        }
+
+        tmp = (obj_t *) malloc(sizeof(obj_t));
+
+        if(!tmp)
+                die("memory allocation error!");
+
+        first->next = tmp;
+
+        
+        i = ri(FIRST_WEAPON, LAST_WEAPON);
+
+        *tmp = objects[i];
+        tmp->prev = first;
+        tmp->next = NULL;
+        tmp->flags |= OF_IDENTIFIED;
+}
+
+void addrandomnormalarmortoinventory(struct creature *c)
+{
+        obj_t *tmp;
+        obj_t *first;
+        int i;
+
+        tmp = c->inventory;
+        first = tmp;
+
+        while(tmp != NULL) {
+                first = tmp;
+                tmp = tmp->next;
+        }
+
+        tmp = (obj_t *) malloc(sizeof(obj_t));
+
+        if(!tmp)
+                die("memory allocation error!");
+
+        first->next = tmp;
+
+        
+        i = ri(FIRST_ARMOR, LAST_ARMOR);
+
+        *tmp = objects[i];
+        tmp->prev = first;
+        tmp->next = NULL;
+        tmp->flags |= OF_IDENTIFIED;
+}
+
 obj_t* get_last_object(obj_t *start)
 {
         obj_t *tmp;
@@ -278,6 +338,41 @@ void init_player_inventory(player_t *player)
         //assletinv(player);  //heh.
 }
 
+
+void init_monster_inventory(struct creature *c)
+{
+        obj_t *o;
+
+        c->inventory = init_inventory(c->inventory);
+
+        if(c->flags & MF_CANHAVEGOLD) {
+                c->inventory->type = OT_GOLD;
+                c->inventory->quantity = ri(1,100) * c->level;
+        }
+
+        if(c->flags & MF_CANUSEWEAPON) {   /* give the monster an appropriate weapon... */
+                addrandomnormalweapontoinventory(c);
+                wieldwear(c->inventory->next, c, 0);
+        }
+
+        if(c->flags & MF_CANUSEARMOR) {
+                addrandomnormalarmortoinventory(c);
+                wieldwear(c->inventory->next->next, c, 0);
+        }
+
+
+        printf("Added to inventory of %s:\n", c->name);
+        o = c->inventory;
+        while(o != NULL) {
+                if(o->type == OT_GOLD) {
+                        printf("\t%d pieces of gold\n", o->quantity);
+                } else {
+                        printf("\t%s\n", o->fullname);
+                }
+                o = o->next;
+        }
+}
+
 void cleanup_inventory(player_t *player)
 {
         int i;
@@ -326,97 +421,110 @@ void dump_inventory(obj_t *inventory)
         }
 }
 
-void wieldwear(char what, player_t *creature)
+void wieldwear(struct object *what, player_t *creature, int isplayer)
 {
         if(creature->inventory->next) {
                 if(what) {
-                        if(creature->weapon == get_obj_by_letter(what)) {
-                                you("unwield the %s", creature->weapon->basename); 
+                        if(creature->weapon == what) {
+                                if(isplayer)
+                                        you("unwield the %s", creature->weapon->basename); 
                                 creature->weapon->flags ^= OF_INUSE;
                                 creature->weapon = NULL;  // unwield it!
                                 return;
                         }
 
-                        if(creature->w.body == get_obj_by_letter(what)) {
-                                you("take off the %s", creature->w.body->basename);
+                        if(creature->w.body == what) {
+                                if(isplayer)
+                                        you("take off the %s", creature->w.body->basename);
                                 creature->ac -= (creature->w.body->dsides + creature->w.body->modifier);
                                 creature->w.body->flags ^= OF_INUSE;
                                 creature->w.body = NULL;
                                 return;
                         }
 
-                        if(creature->w.head == get_obj_by_letter(what)) {
-                                you("take off the %s", creature->w.head->basename);
+                        if(creature->w.head == what) {
+                                if(isplayer)
+                                        you("take off the %s", creature->w.head->basename);
                                 creature->ac -= (creature->w.head->dsides + creature->w.head->modifier);
                                 creature->w.head->flags ^= OF_INUSE;
                                 creature->w.head = NULL;
                                 return;
                         }
-                        if(creature->w.gloves == get_obj_by_letter(what)) {
-                                you("take off the %s", creature->w.gloves->basename);
+                        if(creature->w.gloves == what) {
+                                if(isplayer)
+                                        you("take off the %s", creature->w.gloves->basename);
                                 creature->ac -= (creature->w.gloves->dsides + creature->w.gloves->modifier);
                                 creature->w.gloves->flags ^= OF_INUSE;
                                 creature->w.gloves = NULL;
                                 return;
                         }
-                        if(creature->w.footwear == get_obj_by_letter(what)) {
-                                you("take off the %s", creature->w.footwear->basename);
+                        if(creature->w.footwear == what) {
+                                if(isplayer)
+                                        you("take off the %s", creature->w.footwear->basename);
                                 creature->ac -= (creature->w.footwear->dsides + creature->w.footwear->modifier);
                                 creature->w.footwear->flags ^= OF_INUSE;
                                 creature->w.footwear = NULL;
                                 return;
                         }
 
-                        if(wearable(get_obj_by_letter(what))) {
-                                struct object *tmp;
-                                tmp = get_obj_by_letter(what);
-                                if(is_bodywear(tmp->flags)) {
+                        if(wearable(what)) {
+                                if(is_bodywear(what->flags)) {
                                         if(creature->w.body) {
-                                                gtprintfc(TCOD_red, "You must remove the %s before you can do that.", creature->w.body->basename);
+                                                if(isplayer)
+                                                        gtprintfc(TCOD_red, "You must remove the %s before you can do that.", creature->w.body->basename);
                                                 return;
                                         }
-                                        creature->w.body = tmp;
-                                        you("put on the %s", creature->w.body->basename);
+                                        creature->w.body = what;
+                                        if(isplayer)
+                                                you("put on the %s", creature->w.body->basename);
                                         creature->ac += creature->w.body->dsides + creature->w.body->modifier;
                                         creature->w.body->flags |= OF_INUSE;
-                                } else if(is_footwear(tmp->flags)) {
+                                } else if(is_footwear(what->flags)) {
                                         if(creature->w.footwear) {
-                                                gtprintfc(TCOD_red, "You must take off the %s before you can do that.", creature->w.footwear->basename);
+                                                if(isplayer)
+                                                        gtprintfc(TCOD_red, "You must take off the %s before you can do that.", creature->w.footwear->basename);
                                                 return;
                                         }
-                                        creature->w.footwear = tmp;
-                                        you("put on the %s", creature->w.footwear->basename);
+                                        creature->w.footwear = what;
+                                        if(isplayer)
+                                                you("put on the %s", creature->w.footwear->basename);
                                         if((ri(0,100)) >= 59) {
                                                 // get the reference? *g*
-                                                mess("The shoes are too tight. You are unable to dance.");
+                                                if(isplayer)
+                                                        mess("The shoes are too tight. You are unable to dance.");
                                         }
                                         creature->ac += creature->w.footwear->dsides + creature->w.footwear->modifier;
                                         creature->w.footwear->flags |= OF_INUSE;
-                                } else if(is_gloves(tmp->flags)) {
+                                } else if(is_gloves(what->flags)) {
                                         if(creature->w.gloves) {
-                                                gtprintfc(TCOD_red, "You must take off the %s before you can do that.", creature->w.gloves->basename);
+                                                if(isplayer)
+                                                        gtprintfc(TCOD_red, "You must take off the %s before you can do that.", creature->w.gloves->basename);
                                                 return;
                                         }
-                                        creature->w.gloves = tmp;
-                                        you("put on the %s", creature->w.gloves->basename);
+                                        creature->w.gloves = what;
+                                        if(isplayer)
+                                                you("put on the %s", creature->w.gloves->basename);
                                         creature->ac += creature->w.gloves->dsides + creature->w.gloves->modifier;
                                         creature->w.gloves->flags |= OF_INUSE;
-                                } else if(is_headwear(tmp->flags)) {
+                                } else if(is_headwear(what->flags)) {
                                         if(creature->w.head) {
-                                                gtprintfc(TCOD_red, "You must take off the %s before you can do that.", creature->w.head->basename);
+                                                if(isplayer)
+                                                        gtprintfc(TCOD_red, "You must take off the %s before you can do that.", creature->w.head->basename);
                                                 return;
                                         }
-                                        creature->w.head = tmp;
-                                        you("put on the %s", creature->w.head->basename);
+                                        creature->w.head = what;
+                                        if(isplayer)
+                                                you("put on the %s", creature->w.head->basename);
                                         creature->ac += creature->w.head->dsides + creature->w.head->modifier;
                                         creature->w.head->flags |= OF_INUSE;
                                 }
                         }
 
-                        if(wieldable(get_obj_by_letter(what))) {
-                                creature->weapon = get_obj_by_letter(what);
+                        if(wieldable(what)) {
+                                creature->weapon = what;
                                 creature->weapon->flags |= OF_INUSE;
-                                you("wield the %s", creature->weapon->basename);
+                                if(isplayer)
+                                        you("wield the %s", creature->weapon->basename);
                         }
                 }
         }

@@ -19,7 +19,7 @@ obj_t* init_inventory(obj_t *inventory);
 void init_player_inventory(player_t *player);
 void dump_inventory(obj_t *inventory);
 void cleanup_inventory(player_t *player);
-void wieldwear(char what, player_t *creature);
+void wieldwear(struct object *what, player_t *creature, int isplayer);
 
 int letter_to_entry(char c);
 obj_t* get_obj_by_letter(char c);
@@ -28,4 +28,5 @@ void unassign_objlet(obj_t *o);
 char get_first_free_letter();
 void movenode(struct object **source, struct object **dest);
 
+void init_monster_inventory(struct creature *c);
 #endif

@@ -328,6 +328,7 @@ void init_monsters(world_t *world, player_t *player)
                 tmp->attr.dex += ri(-1,1);
                 tmp->attr.cha += ri(-1,1);
                 tmp->thac0 = (tmp->attr.dex/3) + (tmp->attr.str/4);
+                init_monster_inventory(tmp);
                 world->cell[tmp->y][tmp->x].monster = tmp;
         }
 

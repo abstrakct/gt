@@ -75,23 +75,23 @@ typedef struct obj_list obj_l;
 
 #define START_OBJECTS obj_t objects[] = {
 
-#define OBJ(type, flags, unique, base, unid, mod, ddice, dsides) { 0, 0, type, flags, unique, mod, base, unid, "\0", 0, 1, 1, 0, ddice, dsides, 0},
+#define OBJ(type, flags, unique, base, unid, mod, ddice, dsides, skill) { 0, 0, type, flags, unique, mod, base, unid, "\0", 0, 1, 1, 0, ddice, dsides, skill},
 
-#define WEAPON(flags, base, unid, ddice, dsides) OBJ(OT_WEAPON, flags, 0, base, unid, 0, ddice, dsides)
-#define WEAPON_UNIQUE(flags, base, unid, mod, ddice, dsides) OBJ(OT_WEAPON, flags, 1, base, unid, mod, ddice, dsides)
-#define MAGIC_WEAPON(flags, base, unid, mod, ddice, dsides) OBJ(OT_WEAPON, OF_MAGIC | flags, 0, base, unid, mod, ddice, dsides)
-#define MAGIC_WEAPON_UNIQUE(flags, base, unid, mod, ddice, dsides) OBJ(OT_WEAPON, OF_MAGIC | flags, 1, base, unid, mod, ddice, dsides)
+#define WEAPON(flags, base, unid, ddice, dsides, skill) OBJ(OT_WEAPON, flags, 0, base, unid, 0, ddice, dsides, skill)
+#define WEAPON_UNIQUE(flags, base, unid, mod, ddice, dsides, skill) OBJ(OT_WEAPON, flags, 1, base, unid, mod, ddice, dsides, skill)
+#define MAGIC_WEAPON(flags, base, unid, mod, ddice, dsides, skill) OBJ(OT_WEAPON, OF_MAGIC | flags, 0, base, unid, mod, ddice, dsides, skill)
+#define MAGIC_WEAPON_UNIQUE(flags, base, unid, mod, ddice, dsides, skill) OBJ(OT_WEAPON, OF_MAGIC | flags, 1, base, unid, mod, ddice, dsides, skill)
 
-#define ARMOR(flags, base, unid, ac)  OBJ(OT_ARMOR, flags, 0, base, unid, 0, 0, ac)
-#define SHIELD(flags, base, unid, ac) OBJ(OT_ARMOR, flags | OF_SHIELD, 0, base, unid, 0, 0, ac)
-#define HEADARMOR(flags, base, unid, ac) OBJ(OT_ARMOR, flags | OF_HEADARMOR, 0, base, unid, 0, 0, ac)
-#define GLOVEARMOR(flags, base, unid, ac) OBJ(OT_ARMOR, flags | OF_GLOVES, 0, base, unid, 0, 0, ac)
-#define FOOTARMOR(flags, base, unid, ac) OBJ(OT_ARMOR, flags | OF_FOOTARMOR, 0, base, unid, 0, 0, ac)
-#define MAGIC_ARMOR(flags, base, unid, ac, mod) OBJ(OT_ARMOR, OF_MAGIC | flags, 0, base, unid, mod, 0, ac)
-#define CARD(flags, base, unid) OBJ(OT_CARD, OF_MAGIC | flags, 1, base, unid, 0, 0, 0)
-#define WAND(flags, base) OBJ(OT_WAND, OF_MAGIC | flags, 0, base, "wand", 0, 0, 0)
-#define RING(flags, base, mod) OBJ(OT_RING, OF_MAGIC | flags, 0, base, "ring", mod, 0, 0)
-#define THING(flags, base, unid) OBJ(OT_THING, flags, 0, base, unid, 0, 0, 0)
+#define ARMOR(flags, base, unid, ac)  OBJ(OT_ARMOR, flags, 0, base, unid, 0, 0, ac, 0)
+#define SHIELD(flags, base, unid, ac) OBJ(OT_ARMOR, flags | OF_SHIELD, 0, base, unid, 0, 0, ac, 0)
+#define HEADARMOR(flags, base, unid, ac) OBJ(OT_ARMOR, flags | OF_HEADARMOR, 0, base, unid, 0, 0, ac, 0)
+#define GLOVEARMOR(flags, base, unid, ac) OBJ(OT_ARMOR, flags | OF_GLOVES, 0, base, unid, 0, 0, ac, 0)
+#define FOOTARMOR(flags, base, unid, ac) OBJ(OT_ARMOR, flags | OF_FOOTARMOR, 0, base, unid, 0, 0, ac, 0)
+#define MAGIC_ARMOR(flags, base, unid, ac, mod) OBJ(OT_ARMOR, OF_MAGIC | flags, 0, base, unid, mod, 0, ac, 0)
+#define CARD(flags, base, unid) OBJ(OT_CARD, OF_MAGIC | flags, 1, base, unid, 0, 0, 0, 0)
+#define WAND(flags, base) OBJ(OT_WAND, OF_MAGIC | flags, 0, base, "wand", 0, 0, 0, 0)
+#define RING(flags, base, mod) OBJ(OT_RING, OF_MAGIC | flags, 0, base, "ring", mod, 0, 0, 0)
+#define THING(flags, base, unid) OBJ(OT_THING, flags, 0, base, unid, 0, 0, 0, 0)
 
 #define END_OBJECTS };
 

@@ -18,6 +18,7 @@
 char objchars[] = { ')', '[', '=', '#', '/', '%', '$' };
 int num_objects;
 
+
 void uppercase(char *s)
 {
         int i;
