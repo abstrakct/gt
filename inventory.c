@@ -101,7 +101,9 @@ void addbaseitemtoinventory(struct creature *creature, int i)
                 die("memory allocation error!");
 
         *tmp = objects[i];
-        assign_objlet(tmp);
+        if(creature->flags & MF_ISPLAYER)
+                assign_objlet(tmp);
+
         tmp->prev = first;
         tmp->next = NULL;
         tmp->flags |= OF_IDENTIFIED;

@@ -105,7 +105,7 @@ typedef struct creature player_t;
 #define MF_CANUSEARMOR       0x00000004
 #define MF_CANHAVEGOLD       0x00000008
 #define MF_CANUSESIMPLESWORD 0x00000010
-
+#define MF_ISPLAYER          0x00000020
 typedef struct {
         char name[25];
         signed int hp_mod;
