@@ -106,7 +106,8 @@ void attack(struct creature *attacker, struct creature *attackee, world_t *world
                 }
 
                 if(attacker->weapon->skill) {
-                        attacker->skill[(int)attacker->weapon->skill] += 0.1;
+                        if(attacker->skill[(int)attacker->weapon->skill] < 100)
+                                attacker->skill[(int)attacker->weapon->skill] += 0.1;
 //                        gtprintf("%s - skill is now %f", attacker->name, attacker->skill[attacker->weapon->skill]);
                 }
 
@@ -132,8 +133,9 @@ void attack(struct creature *attacker, struct creature *attackee, world_t *world
                 if(attacker->weapon->skill) {
                         i = ri(1,100);
                         if(i<=(50+attacker->attr.intl)) {
-                                attacker->skill[(int)attacker->weapon->skill] += 0.1;
-//                                gtprintf("%s - skill is now %f", attacker->name, attacker->skill[attacker->weapon->skill]);
+                                if(attacker->skill[(int)attacker->weapon->skill] < 100)
+                                        attacker->skill[(int)attacker->weapon->skill] += 0.1;
+                                        //gtprintf("%s - skill is now %f", attacker->name, attacker->skill[attacker->weapon->skill]);
                         }
                 }
 

@@ -20,6 +20,7 @@
 creature_t *mon;
 
 signed int hp_phys_adj[] = { 0, -3, -2, -2, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 3, 4, 5 };
+char *skillstr[] = { "", "Bare hands fighting", "Long sword", "Short sword", "Battle axe" };
 
 race_t races[RACES+1] = {       /* name, hp, phys, str, intl, know, dex, cha, minphys, minstr, minintl, minknow, mindex, mincha*/
         { "", 0,

@@ -31,6 +31,7 @@ cmd_t outsidecommands[] = {
         { { TCODK_CHAR,   'f', 1, 0, 0, 0, 0, 0 }, CMD_TOGGLEFOV, "Toggle FOV" },
         { { TCODK_F5,       0, 1, 0, 0, 0, 0, 0 }, CMD_SAVE, "Save" },
         { { TCODK_F6,       0, 1, 0, 0, 0, 0, 0 }, CMD_LOAD, "Load" },
+        { { TCODK_F7,       0, 1, 0, 0, 0, 0, 0 }, CMD_SKILLSCREEN, "Show skills" },
         { { TCODK_CHAR,   'e', 1, 0, 0, 0, 0, 0 }, CMD_ENTERDUNGEON, "Enter dungeon" },
         { { TCODK_CHAR,   'w', 1, 0, 0, 0, 0, 0 }, CMD_WIELD, "Wield/wear" },
         { { TCODK_CHAR,   'i', 1, 0, 0, 0, 0, 0 }, CMD_IDENTIFYALL, "Identify everything" },
@@ -53,6 +54,7 @@ cmd_t dungeoncommands[] = {
         { { TCODK_CHAR,   'f', 1, 0, 0, 0, 0, 0 }, CMD_TOGGLEFOV, "Toggle FOV" },
         { { TCODK_F5,       0, 1, 0, 0, 0, 0, 0 }, CMD_SAVE, "Save" },
         { { TCODK_F6,       0, 1, 0, 0, 0, 0, 0 }, CMD_LOAD, "Load" },
+        { { TCODK_F7,       0, 1, 0, 0, 0, 0, 0 }, CMD_SKILLSCREEN, "Show skills" },
         { { TCODK_CHAR,   'x', 1, 0, 0, 0, 0, 0 }, CMD_LEAVEDUNGEON, "Exit dungeon" },
 };
 

@@ -411,8 +411,8 @@ void update_stats(int x, int y, world_t *world, player_t *player)
         youwinprint(TCOD_yellow, "Inventory:");
         tmpy = display_inventory(player);
 
-        uy++;
-        youwinprint(TCOD_white, "Long sword skill: %.1f", player->skill[SK_LONGSWORD]);
+        //uy++;
+        //youwinprint(TCOD_white, "Long sword skill: %.1f", player->skill[SK_LONGSWORD]);
 
 /*        for(i=0;i<num_commands;i++) {
                 if(strcmp(get_command_text(i), "")) {

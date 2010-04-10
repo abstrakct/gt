@@ -32,6 +32,7 @@ TCOD_console_t mess_console;
 
 extern race_t races[RACES];
 extern class_t classes[CLASSES];
+extern char *skillstr[];
 
 int mapcxsize, mapcysize;
 
@@ -369,6 +370,28 @@ void mess_color(TCOD_color_t color, char *message)
         domess();
 }
 
+void showskills(TCOD_console_t *cons, struct creature *player)
+{
+        int i, j, n;
+
+        TCOD_console_print_left(*cons, 0, 0, TCOD_BKGND_NONE, "Skills:");
+
+        for(i=1;i<=NUMSKILLS;i++) {
+                TCOD_console_print_left(*cons, 0, i+1, TCOD_BKGND_NONE, "%s", skillstr[i]);
+        }
+
+        for(i=1;i<=NUMSKILLS;i++) {
+                TCOD_console_print_left(*cons, 20, i+1, TCOD_BKGND_NONE, "[");
+                n = (int) player->skill[i] / 10;
+                for(j=0;j<n;j++)
+                        TCOD_console_print_left(*cons, 21+j, i+1, TCOD_BKGND_NONE, "%c", 0xFE);
+                for(j=n;j<10;j++)
+                        TCOD_console_print_left(*cons, 21+j, i+1, TCOD_BKGND_NONE, ".");
+
+                TCOD_console_print_left(*cons, 31, i+1, TCOD_BKGND_NONE, "]");
+        }
+
+}
 
 void savepxy(player_t *player)
 {
@@ -415,6 +438,7 @@ int main(int argc, char *argv[])
         char wintitle[50];
         struct object *o;
         char what;
+        TCOD_console_t tmpconsole;
         
         //TCOD_heightmap_t *hm;
 
@@ -718,6 +742,19 @@ int main(int argc, char *argv[])
                                         o->flags |= OF_IDENTIFIED;
                                         o = o->next;
                                 }
+                                mapchanged = 1;
+                                break;
+                        case CMD_SKILLSCREEN:
+                                tmpconsole = TCOD_console_new(50,20);
+                                TCOD_console_set_foreground_color(tmpconsole, TCOD_white);
+                                TCOD_console_set_background_color(tmpconsole, TCOD_black);
+                                TCOD_console_clear(tmpconsole);
+                                showskills(&tmpconsole, player);
+                                TCOD_console_blit(tmpconsole,0,0,50,20,NULL,40,10,1.0,1.0);
+                                TCOD_console_flush();
+                                TCOD_console_wait_for_keypress(false);
+                                TCOD_console_delete(tmpconsole);
+                                seenothing = 0;
                                 mapchanged = 1;
                                 break;
                         default:

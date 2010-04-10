@@ -83,7 +83,7 @@ typedef struct creature player_t;
 #define SK_LONGSWORD  2
 #define SK_SHORTSWORD 3
 #define SK_BATTLEAXE  4
-
+#define NUMSKILLS 4
 
 #define START_MONSTERS creature_t monsters[] = {
 #define MONSTER(name, character, level, hp, ai, speed, str, phys, intl, know, dex, cha, tohit, flags) { 0, 0, hp, hp, 0, 0, { str, phys, intl, know, dex, cha }, level, 0, 0, 0, 0, 0, 0, { 0,0,0,0,0,0, {0,0,0,0,0,0,0,0,0,0} }, flags, name, character, speed, 0, {0,0,0}, ai, 0, 0, 0, 0, 0, 0, tohit, {0,0,0,0,0,0,0,0,0,0}},
@@ -106,6 +106,7 @@ typedef struct creature player_t;
 #define MF_CANHAVEGOLD       0x00000008
 #define MF_CANUSESIMPLESWORD 0x00000010
 #define MF_ISPLAYER          0x00000020
+
 typedef struct {
         char name[25];
         signed int hp_mod;
