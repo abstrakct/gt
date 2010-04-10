@@ -212,7 +212,10 @@ void hostileai(creature_t *creature, creature_t *player)
                                 creature->y--;
                 }
 
-
+                if(aisnexttob(creature, player)) {
+                        creature->attacker = player;
+                        player->attacker = creature;
+                }
         } else {
                 creature->attacker = NULL;
                 simpleoutdoorpathfinder(creature, player);
