@@ -2,4 +2,25 @@ config.h
 verdenssyn ( <- intelligens)
 sult
 
+primary/secondary skills!
 
+UFERDIGE DELVIS IMPLEMENTERTE TING:
+* BALANSE
+* XP/leveling
+* monsterinventory (drop when killed)
+* skills
+* monsterinventory generelt (for kraftige våpen!)
+
+        speed/turn-- du kan alltid løpe bort fra et monster, selv om det står like ved deg!
+        --> initiativ??!? eller noe bedre/annerledes.
+
+
+tanker/ting (notert på tlf på jobb):
+        1. (*) skills
+        2. effekt av ringer
+        3. magiske effekter generelt
+        4. flere monster
+        5. monster, ting etc. i dungeon
+        6. mer nethack-ish dungeon generator??
+        7. byer, butikker og skoger!
+        8. Generere nye monster!

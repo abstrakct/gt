@@ -284,7 +284,7 @@ void init_monsters(world_t *world, player_t *player)
 
         tmp = mon;
         num = ri(XSIZE/8, YSIZE/4);
-        printf("creating %d monsters..\n", num);
+        printf("\tcreating %d monsters..\n", num);
 
         for(i=0;i<num;i++) {
                 int ok = 0;

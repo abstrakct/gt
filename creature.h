@@ -100,11 +100,11 @@ typedef struct creature player_t;
 
 /* monster flags! */
 
-#define MF_ISHOSTILE    0x00000001
-#define MF_CANUSEWEAPON 0x00000002
-#define MF_CANUSEARMOR  0x00000004
-#define MF_CANHAVEGOLD  0x00000008
-
+#define MF_ISHOSTILE         0x00000001
+#define MF_CANUSEWEAPON      0x00000002
+#define MF_CANUSEARMOR       0x00000004
+#define MF_CANHAVEGOLD       0x00000008
+#define MF_CANUSESIMPLESWORD 0x00000010
 
 typedef struct {
         char name[25];

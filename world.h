@@ -22,10 +22,6 @@
 #define YSIZE	800
 
 
-#define PLAYER      7
-#define INFO        8
-#define NORMAL      9
-
 /* DUNGEON STUFF */
 #define D_FLOOR 100
 #define D_WALL  101

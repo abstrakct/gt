@@ -427,7 +427,7 @@ int main(int argc, char *argv[])
 #ifdef DEVEL_MODE
         player->x = XSIZE/2;
         player->y = YSIZE/2;
-        player->race = player->cla = 0;
+        player->race = player->cla = 1;
         strcpy(player->name, "Apsalar");
 #else
         get_raceclass_selection(player);

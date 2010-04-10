@@ -51,3 +51,6 @@ v0.0.13: (2010-04-01)
 * 2010-04-07: Added rudimentary (weapon) skills
 * 2010-04-09: Added monster inventory, monster flags, monsters can use weapons
 and armor!!
+* 2010-04-10: Monsters now drop their inventory when killed!
+* Made world generation more dependent on XSIZE/YSIZE (and an interesting
+		discovery!)

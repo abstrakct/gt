@@ -36,7 +36,7 @@ void init_materials()
                 char tmp[100];
                 strcpy(tmp, objects[i].unidname);
                 sprintf(objects[i].unidname, "%s %s", matstr[(int)objects[i].material], tmp);
-                printf("%s is a %s\n", objects[i].fullname, objects[i].unidname);
+//                printf("%s is a %s\n", objects[i].fullname, objects[i].unidname);
         }
 
         mat = 1;
@@ -55,6 +55,6 @@ void init_materials()
                 char tmp[100];
                 strcpy(tmp, objects[i].unidname);
                 sprintf(objects[i].unidname, "%s %s", matstr[(int)objects[i].material], tmp);
-                printf("%s is a %s\n", objects[i].fullname, objects[i].unidname);
+//                printf("%s is a %s\n", objects[i].fullname, objects[i].unidname);
         }
 }

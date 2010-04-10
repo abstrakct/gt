@@ -7,6 +7,7 @@
 #include "world.h" 
 #include "creature.h"
 #include "you.h"
+#include "inventory.h"
 
 int get_xp(struct creature *creature)
 {
@@ -35,10 +36,23 @@ void kill(struct creature *creature, world_t *world)
         you_c(TCOD_green, "kill the %s!", creature->name);
         world->player->xp += get_xp(creature);
         world->player->wvfactor--;
-//        you("get %d xp!", get_xp(creature));
+        //        you("get %d xp!", get_xp(creature));
+
         creature->prev->next = creature->next;
         creature->next->prev = creature->prev;
         world->cell[creature->y][creature->x].monster = NULL;
+
+        if(creature->inventory) {
+                wieldwear(creature->inventory->next->next, creature, 0);
+                wieldwear(creature->inventory->next, creature, 0);
+                if(!world->cell[creature->y][creature->x].inventory) {
+                        world->cell[creature->y][creature->x].inventory = creature->inventory;
+                } else {
+                        world->cell[creature->y][creature->x].inventory->quantity += creature->inventory->quantity;
+                        world->cell[creature->y][creature->x].inventory->next = creature->inventory->next;
+                }
+        }
+
         free(creature);
 }
 

@@ -81,12 +81,12 @@ void unassign_objlet(obj_t *o)
         }
 }
 
-void addbaseitemtoinventory(player_t *player, int i)
+void addbaseitemtoinventory(struct creature *creature, int i)
 {
         obj_t *tmp;
         obj_t *first;
 
-        tmp = player->inventory;
+        tmp = creature->inventory;
         first = tmp;
 
         while(tmp != NULL) {
@@ -129,7 +129,7 @@ void addrandomnormalweapontoinventory(struct creature *c)
         first->next = tmp;
 
         
-        i = ri(FIRST_WEAPON, LAST_WEAPON);
+        i = ri(FIRST_WEAPON, 6);  /* OBS HARDCODED !!!! */
 
         *tmp = objects[i];
         tmp->prev = first;
@@ -159,7 +159,7 @@ void addrandomnormalarmortoinventory(struct creature *c)
         first->next = tmp;
 
         
-        i = ri(FIRST_ARMOR, LAST_ARMOR);
+        i = ri(FIRST_ARMOR, 21);    /* OBS HARDCODED !!! */
 
         *tmp = objects[i];
         tmp->prev = first;
@@ -341,27 +341,38 @@ void init_player_inventory(player_t *player)
 
 void init_monster_inventory(struct creature *c)
 {
-        obj_t *o;
+//        obj_t *o;
+        int i;        
 
-        c->inventory = init_inventory(c->inventory);
-
-        if(c->flags & MF_CANHAVEGOLD) {
+        if(c->flags & MF_CANHAVEGOLD || c->flags & MF_CANUSEWEAPON || c->flags & MF_CANUSEARMOR) { // only add inventory for monsters who can have one!
+                c->inventory = init_inventory(c->inventory);
                 c->inventory->type = OT_GOLD;
-                c->inventory->quantity = ri(1,100) * c->level;
+                if(c->flags & MF_CANHAVEGOLD)
+                        c->inventory->quantity = ri(1,100) * c->level;
+                
+
+                if(c->flags & MF_CANUSESIMPLESWORD) {
+                        i = ri(1,100);
+                        if(i<=33)
+                                addbaseitemtoinventory(c, SHORT_SWORD);
+                        if(i>33&&i<=66)
+                                addbaseitemtoinventory(c, SMALL_AXE);
+                        if(i>66)
+                                addbaseitemtoinventory(c, DAGGER);
+                }
+
+                if(c->flags & MF_CANUSEWEAPON) {   /* give the monster an appropriate weapon... */
+                        addrandomnormalweapontoinventory(c);
+                        wieldwear(c->inventory->next, c, 0);
+                }
+
+                if(c->flags & MF_CANUSEARMOR) {
+                        addrandomnormalarmortoinventory(c);
+                        wieldwear(c->inventory->next->next, c, 0);
+                }
         }
 
-        if(c->flags & MF_CANUSEWEAPON) {   /* give the monster an appropriate weapon... */
-                addrandomnormalweapontoinventory(c);
-                wieldwear(c->inventory->next, c, 0);
-        }
-
-        if(c->flags & MF_CANUSEARMOR) {
-                addrandomnormalarmortoinventory(c);
-                wieldwear(c->inventory->next->next, c, 0);
-        }
-
-
-        printf("Added to inventory of %s:\n", c->name);
+        /*printf("Added to inventory of %s:\n", c->name);
         o = c->inventory;
         while(o != NULL) {
                 if(o->type == OT_GOLD) {
@@ -370,7 +381,7 @@ void init_monster_inventory(struct creature *c)
                         printf("\t%s\n", o->fullname);
                 }
                 o = o->next;
-        }
+        }*/
 }
 
 void cleanup_inventory(player_t *player)
@@ -421,7 +432,7 @@ void dump_inventory(obj_t *inventory)
         }
 }
 
-void wieldwear(struct object *what, player_t *creature, int isplayer)
+void wieldwear(struct object *what, struct creature *creature, int isplayer)
 {
         if(creature->inventory->next) {
                 if(what) {

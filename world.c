@@ -251,23 +251,23 @@ void generate_world(world_t *world)
 
         // now, lets generate some stuff
 
-        world->forests = ri(10,90);
+        world->forests = ri(XSIZE/80,XSIZE/9);  // was 10, 90
         printf("\n\tgenerating %d forests...", world->forests);
         generate_area(world->forests, FOREST, MAXFORESTSIZE, 4, world);
 
-        world->cities = ri(15,35);
+        world->cities = ri(XSIZE/50,XSIZE/22);  //was 15,35
         printf("\n\tgenerating %d large cities...", world->cities);
         generate_area(world->cities, CITY, LARGECITYSIZE, 2, world);
 
-        world->villages = world->cities + ri(30,100); 
-        printf("\n\tgenerating %d villages...\n", world->villages);
+        world->villages = world->cities + ri(XSIZE/26,XSIZE/8);  //was 30,100
+        printf("\n\tgenerating %d villages...", world->villages);
         generate_area(world->villages, VILLAGE, VILLAGESIZE, 1, world);
 
-        world->dungeons = ri(50,100);
-        printf("\n\treadying %d dungeons...\n", world->dungeons);
+        world->dungeons = ri(XSIZE/16,XSIZE/8);  //was 50,100
+        printf("\n\treadying %d dungeons...", world->dungeons);
         generate_area(world->dungeons, DUNGEON, DUNGEONSIZE, 0, world);
 
-        items = ri(50, 130);
+        items = ri(XSIZE/16, XSIZE/6);  //was 50,130
         printf("\n\tdistributing %d items around the world...\n", items);
         for(i=0;i<items;i++) {
                 j = ri(0, NUM_OBJECTS-1);
@@ -281,7 +281,7 @@ void generate_world(world_t *world)
                                 addgoldtoworldcell(world, x, y, 0);       // add a dummy base gold item thingy
                                 addbaseitemtoworldcell(world, x, y, j);
                                 objects[j].quantity++;
-                                printf("added %s to the world\n", objects[j].fullname);
+                                printf("\tadding %s to the world\n", objects[j].fullname);
                         }
                 } else {
                         x = ri(0,XSIZE-1);
