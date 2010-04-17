@@ -624,9 +624,14 @@ void clean_up_dungeon(world_t *world)
         x = y = 0;
         for(x=0;x</*world->dungeon.xsize*/XSIZE;x++) {
                 for(y=0;y</*world->dungeon.ysize*/YSIZE;y++) {
-                        if(world->dungeon.cell[y][x].type == D_FLOOR && world->dungeon.cell[y][x+1].type == D_WALL && world->dungeon.cell[y][x+2].type == D_FLOOR)
+                        if(world->dungeon.cell[y][x].type == D_FLOOR && world->dungeon.cell[y][x+1].type == D_WALL && world->dungeon.cell[y][x+2].type == D_FLOOR) {
                                 world->dungeon.cell[y][x+1].type = D_FLOOR;
                         }
+
+                        if(world->dungeon.cell[y][x].type == D_FLOOR && world->dungeon.cell[y+1][x].type == D_WALL && world->dungeon.cell[y+2][x].type == D_FLOOR) {
+                                world->dungeon.cell[y+1][x].type = D_FLOOR;
+                        }
+                }
         }
 }
 
@@ -672,7 +677,7 @@ void my_generate_dungeon(world_t *world, int maxx, int maxy)
         startleftx = x; startlefty = y; startrightx = x2; startrighty = y2;
         counter = 0;
 
-        while(counter <= 6) {
+        while(counter <= maxy/10) {
                 for(i=0;i<XSIZE;i++) {
                         for(j=0;j<YSIZE;j++) {
                                 if(world->dungeon.cell[j][i].type == D_WALL)
@@ -683,9 +688,9 @@ void my_generate_dungeon(world_t *world, int maxx, int maxy)
                 y += h;
                 dir = ri(0,1);
                 if(dir) { // right 
-                        y += ri(1,h);
+                        y += ri((0-h),h);
                 } else {
-                        x += ri(1,w);
+                        x += ri((0-w),w);
                 }
                 if(dir) {
                         y2 = y + ri(h+5,40);
@@ -699,15 +704,17 @@ void my_generate_dungeon(world_t *world, int maxx, int maxy)
                 w = ri(3, 10);
                 h = ri(3, 10);
                 if(dir) { // y
-                        make_room_right(world, x, y, w, h);
+                        make_room_right(world, x2, y2, w, h);
                         counter++;
                 } else {
-                        make_room_left(world, x, y, w, h);
+                        make_room_left(world, x2, y2, w, h);
                         counter++;
                 }
 
                 x2 = x;
                 y2 = y;
+                clean_up_dungeon(world);
+                clean_up_dungeon(world);
                 clean_up_dungeon(world);
         }
 
