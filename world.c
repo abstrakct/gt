@@ -231,15 +231,15 @@ void addbaseitemtoworldcell(world_t *world, int x, int y, int i)
 }
 
 
-void generate_world(world_t *world)
+void generate_world(world_t *world, int xsize, int ysize, int minf, int maxf, int minc, int maxc, int minv, int maxv, int mind, int maxd, int mini, int maxi)
 {
         int i,j,color,items,x,y;
         TCOD_color_t plaincolors[3] = { COLOR_PLAIN1, COLOR_PLAIN2, COLOR_PLAIN3 };
 
         world->cities = world->villages = world->forests = world->dungeons = 0;
 
-        for(i=0;i<XSIZE;i++) {
-                for(j=0;j<YSIZE;j++) { 
+        for(i=0;i<xsize;i++) {
+                for(j=0;j<xsize;j++) { 
                         world->cell[j][i].type = PLAIN;
                         world->cell[j][i].flags = 0;
                         color = ri(0,2);
@@ -251,23 +251,26 @@ void generate_world(world_t *world)
 
         // now, lets generate some stuff
 
-        world->forests = ri(XSIZE/80,XSIZE/9);  // was 10, 90
+        world->forests = ri(minf,maxf);  // was 10, 90
         printf("\n\tgenerating %d forests...", world->forests);
+        world->forest = calloc(world->forests, sizeof(forest_t));
         generate_area(world->forests, FOREST, MAXFORESTSIZE, 4, world);
 
-        world->cities = ri(XSIZE/50,XSIZE/22);  //was 15,35
-        printf("\n\tgenerating %d large cities...", world->cities);
+        world->cities = ri(minc, maxc);  //was 15,35
+        printf("\n\tgenerating %d cities", world->cities);
+        world->city = calloc(world->cities, sizeof(city_t));
         generate_area(world->cities, CITY, LARGECITYSIZE, 2, world);
 
-        world->villages = world->cities + ri(XSIZE/26,XSIZE/8);  //was 30,100
+        world->villages = world->cities + ri(minv, maxv);  //was 30,100
+        world->village = calloc(world->villages, sizeof(city_t));
         printf("\n\tgenerating %d villages...", world->villages);
         generate_area(world->villages, VILLAGE, VILLAGESIZE, 1, world);
 
-        world->dungeons = ri(XSIZE/16,XSIZE/8);  //was 50,100
+        world->dungeons = ri(mind, maxd);  //was 50,100
         printf("\n\treadying %d dungeons...", world->dungeons);
         generate_area(world->dungeons, DUNGEON, DUNGEONSIZE, 0, world);
 
-        items = ri(XSIZE/16, XSIZE/6);  //was 50,130
+        items = ri(mini, maxi);  //was 50,130
         printf("\n\tdistributing %d items around the world...\n", items);
         for(i=0;i<items;i++) {
                 j = ri(0, NUM_OBJECTS-1);
@@ -276,23 +279,23 @@ void generate_world(world_t *world)
 
                 if(objects[j].unique) {
                         if(objects[j].quantity<=1) {
-                                x = ri(0,XSIZE-1);
-                                y = ri(0,YSIZE-1);
+                                x = ri(0, xsize-1);
+                                y = ri(0, ysize-1);
                                 addgoldtoworldcell(world, x, y, 0);       // add a dummy base gold item thingy
                                 addbaseitemtoworldcell(world, x, y, j);
                                 objects[j].quantity++;
                                 printf("\tadding %s to the world\n", objects[j].fullname);
                         }
                 } else {
-                        x = ri(0,XSIZE-1);
-                        y = ri(0,YSIZE-1);
+                        x = ri(0, xsize-1);
+                        y = ri(0, ysize-1);
                         addgoldtoworldcell(world, x, y, 0);       // add a dummy base gold item thingy
                         addbaseitemtoworldcell(world, x, y, j);
                         //printf("added %s to the world\n", objects[j].fullname);
                 }
 
                 if(ri(1,100) >= 50) {
-                        addgoldtoworldcell(world, ri(0, XSIZE-1), ri(0, YSIZE-1), 200);
+                        addgoldtoworldcell(world, ri(0, xsize-1), ri(0, ysize-1), 200);
                         //printf("adding some gold!\n");
                 }
         }

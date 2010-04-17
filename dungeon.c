@@ -530,6 +530,190 @@ int generate_dungeon(int xsize, int ysize, int ngb_min, int ngb_max, int conncha
         return 0;
 }
 
+void nothingtowall(world_t *world, int x, int y)
+{
+        if(world->dungeon.cell[y][x].type == D_NOTHING)
+                world->dungeon.cell[y][x].type = D_WALL;
+}
+
+void set_floor(world_t *world, int x, int y)
+{
+        world->dungeon.cell[y][x].type = D_FLOOR;
+        // whatever nothing-cells are around the floor is set to wall
+        nothingtowall(world, x-1, y);
+        nothingtowall(world, x, y-1);
+        nothingtowall(world, x, y+1);
+        nothingtowall(world, x+1, y);
+        nothingtowall(world, x-1, y-1);
+        nothingtowall(world, x-1, y+1);
+        nothingtowall(world, x+1, y-1);
+        nothingtowall(world, x+1, y+1);
+}
+
+void make_corridor(world_t *world, TCOD_map_t *map, int x, int y, int x2, int y2)
+{
+        TCOD_path_t path;
+        int i, a, b;
+
+        path = TCOD_path_new_using_map(*map, 1.41f);
+        TCOD_path_compute(path, x, y, x2, y2);
+        if(!path)
+                die("no path!");
+
+        while(!TCOD_path_is_empty(path)) {
+                int x, y;
+                if(TCOD_path_walk(path, &x, &y, false)) {
+//                        world->dungeon.cell[y][x].type = D_FLOOR;
+                        set_floor(world, x, y);
+                        i = ri(1,100);
+                        if(i<=70) {
+                                a = ri(-1,1);
+                                b = ri(-1,1);
+                                // add some more randomness!
+                                set_floor(world, x+b, y+a);
+                        }
+                }
+        }
+
+        TCOD_path_delete(path);
+}
+
+void make_room_left(world_t *world, int x, int y, int w, int h)
+{
+        int sx, sy;
+
+        // let's try to make it simple, stupid
+        for(sx = x; sx>=(x-w); sx--) {
+                for(sy = y; sy>=(y-h); sy--) {
+                        set_floor(world, sx, sy);
+                        //world->dungeon.cell[sy][sx].type = D_FLOOR;
+                }
+        }
+}
+
+void make_room_right(world_t *world, int x, int y, int w, int h)
+{
+        int sx, sy;
+
+        // let's try to make it simple, stupid
+        for(sx = x; sx<=(x+w); sx++) {
+                for(sy = y; sy<=(y+h); sy++) {
+                        set_floor(world, sx, sy);
+                        //world->dungeon.cell[sy][sx].type = D_FLOOR;
+                }
+        }
+}
+
+void make_room_down(world_t *world, int x, int y, int w, int h)
+{
+        int sx, sy;
+
+        // let's try to make it simple, stupid
+        for(sx = x; sx<=(x+w); sx++) {
+                for(sy = y; sy<=(y+h); sy++) {
+                        set_floor(world, sx, sy);
+                        //world->dungeon.cell[sy][sx].type = D_FLOOR;
+                }
+        }
+}
+
+void clean_up_dungeon(world_t *world)
+{
+        int x, y;
+
+        x = y = 0;
+        for(x=0;x</*world->dungeon.xsize*/XSIZE;x++) {
+                for(y=0;y</*world->dungeon.ysize*/YSIZE;y++) {
+                        if(world->dungeon.cell[y][x].type == D_FLOOR && world->dungeon.cell[y][x+1].type == D_WALL && world->dungeon.cell[y][x+2].type == D_FLOOR)
+                                world->dungeon.cell[y][x+1].type = D_FLOOR;
+                        }
+        }
+}
+
+void my_generate_dungeon(world_t *world, int maxx, int maxy)
+{
+        // OK, first attempt at writing my own dungeon generator!
+
+        TCOD_map_t map;
+        int i, j, x, y, x2, y2, w, h, dir, counter;
+        int startleftx, startlefty, startrightx, startrighty;
+
+        world->dungeon.xsize = maxx;
+        world->dungeon.ysize = maxy;
+        map = TCOD_map_new(XSIZE, YSIZE);
+
+        // First, set everything to be nothing 
+        for(i=0;i<XSIZE;i++) {
+                for(j=0;j<YSIZE;j++) {
+                        world->dungeon.cell[j][i].flags = 0;
+                        world->dungeon.cell[j][i].type = D_NOTHING;
+                        world->dungeon.cell[j][i].color = TCOD_white;
+                        TCOD_map_set_properties(map, i, j, true, true);
+                }
+        }
+
+        x = ri(0,maxx);
+        y = ri(0,maxy);
+        x2 = x + ri(0,20);
+        y2 = y + ri(0,20);
+
+        // Then, make a corridor
+        make_corridor(world, &map, x, y, x2, y2);
+        
+        // a room at each end of the corridor...
+        w = ri(3, 10);
+        h = ri(3, 10);
+        make_room_left(world, x, y, w, h);
+        w = ri(3, 10);
+        h = ri(3, 10);
+        make_room_right(world, x2, y2, w, h);
+
+        /* ok, we have a starting point. Now, lets expand. */
+        startleftx = x; startlefty = y; startrightx = x2; startrighty = y2;
+        counter = 0;
+
+        while(counter <= 6) {
+                for(i=0;i<XSIZE;i++) {
+                        for(j=0;j<YSIZE;j++) {
+                                if(world->dungeon.cell[j][i].type == D_WALL)
+                                        TCOD_map_set_properties(map, i, j, true, false);
+                        }
+                }
+                x += w;
+                y += h;
+                dir = ri(0,1);
+                if(dir) { // right 
+                        y += ri(1,h);
+                } else {
+                        x += ri(1,w);
+                }
+                if(dir) {
+                        y2 = y + ri(h+5,40);
+                } else {
+                        x2 = x - ri(w+5,40);
+                }
+
+                make_corridor(world, &map, x, y, x2, y2);
+                //x = x2;
+                //y = y2;
+                w = ri(3, 10);
+                h = ri(3, 10);
+                if(dir) { // y
+                        make_room_right(world, x, y, w, h);
+                        counter++;
+                } else {
+                        make_room_left(world, x, y, w, h);
+                        counter++;
+                }
+
+                x2 = x;
+                y2 = y;
+                clean_up_dungeon(world);
+        }
+
+
+}
+
 void init_dungeon(world_t *world, int maxxsize, int maxysize)
 {
         int d;
@@ -539,6 +723,11 @@ void init_dungeon(world_t *world, int maxxsize, int maxysize)
         world->dungeon.xsize = maxxsize + ri(0, (800 - mapcxsize)-1);
         world->dungeon.ysize = maxysize + ri(0, (800 - mapcysize)-1);
 
+
+        if(d>=0) {
+                my_generate_dungeon(world, 125, 80);
+                return;
+        }
 
         if(d <= 33)
                 if(generate_dungeon(world->dungeon.xsize, world->dungeon.ysize, 3, 8, 0, 0, world))

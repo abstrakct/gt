@@ -32,6 +32,10 @@ typedef struct {
 #define CMD_WIELD 17
 #define CMD_IDENTIFYALL 18
 #define CMD_SKILLSCREEN 19
+#define CMD_NW 20
+#define CMD_NE 21
+#define CMD_SW 22
+#define CMD_SE 23
 
 //extern cmd_t (*currentcommands)[];
 extern cmd_t *currentcommands;

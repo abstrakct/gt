@@ -220,7 +220,7 @@ void get_dungeon_starting_location(player_t *player, world_t *world)
         x = ri(0, world->dungeon.xsize-1);
         y = ri(0, world->dungeon.ysize-1);
 
-        while(world->dungeon.cell[y][x].type == D_WALL) {
+        while(world->dungeon.cell[y][x].type == D_WALL || world->dungeon.cell[y][x].type == D_NOTHING) {
                 x = ri(0, world->dungeon.xsize-1);
                 y = ri(0, world->dungeon.ysize-1);
         }
@@ -503,7 +503,8 @@ int main(int argc, char *argv[])
         } else if(argc == 1) {
                 TCOD_console_print_center(NULL, wmaxx/2, (wmaxy/2)+3, TCOD_BKGND_NONE, "Creating the world...");
                 TCOD_console_flush();
-                generate_world(world);
+                generate_world(world, XSIZE, YSIZE, XSIZE/80, XSIZE/9, XSIZE/50, XSIZE/22, XSIZE/26, XSIZE/8, XSIZE/16, XSIZE/8, XSIZE/16, XSIZE/6);
+//                generate_world(world, XSIZE, YSIZE, 200, 400, 100, 300, 100, 300, 100, 200, 100, 200);
         }
 
         world->player = player;
@@ -554,16 +555,14 @@ int main(int argc, char *argv[])
                                 mapchanged = 1;
                                 break;
                         case CMD_LONGLEFT:
-                                if(outside) {
-                                        player->x -= 20;
-                                        mapchanged = 1;
-                                        if(player->x < 0)
-                                                player->x = 0;
-                                        if(player->x <= (px+(mapcxsize/6)))
-                                                px-=20;
-                                        if(px <= 0)
-                                                px = 0;
-                                }
+                                player->x -= 20;
+                                mapchanged = 1;
+                                if(player->x < 0)
+                                        player->x = 0;
+                                if(player->x <= (px+(mapcxsize/6)))
+                                        px-=20;
+                                if(px <= 0)
+                                        px = 0;
                                 break;
                         case CMD_RIGHT:
                                 player->x++;
@@ -603,6 +602,106 @@ int main(int argc, char *argv[])
                                         py--;
                                 if(py <= 0)
                                         py = 0;
+                                break;
+                        case CMD_NW:
+                                if(indungeon) {
+                                        if(world->dungeon.cell[player->y-1][player->x-1].type == D_FLOOR) {
+                                                player->y--; player->x--;
+                                        }
+                                } else {
+                                        player->y--;
+                                        player->x--;
+                                }
+
+                                mapchanged=1;
+                                if(player->y < 0) {
+                                        player->y = 0;
+                                        mapchanged=0;
+                                }
+                                if(player->y <= (py+(mapcysize/6)))
+                                        py--;
+                                if(py <= 0)
+                                        py = 0;
+
+                                if(player->x < 0)
+                                        player->x = 0;
+                                if(player->x <= (px+(mapcxsize/6)))
+                                        px--;
+                                if(px <= 0)
+                                        px = 0;
+                                break;
+                        case CMD_NE:
+                                if(indungeon) {
+                                        if(world->dungeon.cell[player->y-1][player->x+1].type == D_FLOOR) {
+                                                player->y--; player->x++;
+                                        }
+                                } else {
+                                        player->y--;
+                                        player->x++;
+                                }
+                                if(player->x >= XSIZE-1)
+                                        player->x = XSIZE-2;
+                                if(player->x >= (px+(mapcxsize/6*5)))
+                                        px++;
+                                if(px >= XSIZE-mapcxsize)
+                                        px = XSIZE-mapcxsize-1;
+                                if(player->y < 0) {
+                                        player->y = 0;
+                                        mapchanged=0;
+                                }
+                                if(player->y <= (py+(mapcysize/6)))
+                                        py--;
+                                if(py <= 0)
+                                        py = 0;
+                                mapchanged = 1;
+                                break;
+                                // yeah, the command/movement handling is ridiculous... i should make them functions.
+                        case CMD_SW:
+                                if(indungeon) {
+                                        if(world->dungeon.cell[player->y+1][player->x-1].type == D_FLOOR) {
+                                                player->y++; player->x--;
+                                        }
+                                } else {
+                                        player->y++;
+                                        player->x--;
+                                }
+                                if(player->y >= YSIZE-1)
+                                        player->y = YSIZE-2;
+                                if(player->y >= (py+(mapcysize/6*5)))
+                                        py++;
+                                if(py >= YSIZE-mapcysize)
+                                        py = YSIZE-mapcysize-1;
+
+                                if(player->x < 0)
+                                        player->x = 0;
+                                if(player->x <= (px+(mapcxsize/6)))
+                                        px--;
+                                if(px <= 0)
+                                        px = 0;
+                                mapchanged = 1;
+                                break;
+                        case CMD_SE:
+                                if(indungeon) {
+                                        if(world->dungeon.cell[player->y+1][player->x+1].type == D_FLOOR) {
+                                                player->y++; player->x++;
+                                        }
+                                } else {
+                                        player->y++;
+                                        player->x++;
+                                }
+                                if(player->y >= YSIZE-1)
+                                        player->y = YSIZE-2;
+                                if(player->y >= (py+(mapcysize/6*5)))
+                                        py++;
+                                if(py >= YSIZE-mapcysize)
+                                        py = YSIZE-mapcysize-1;
+                                if(player->x >= XSIZE-1)
+                                        player->x = XSIZE-2;
+                                if(player->x >= (px+(mapcxsize/6*5)))
+                                        px++;
+                                if(px >= XSIZE-mapcxsize)
+                                        px = XSIZE-mapcxsize-1;
+                                mapchanged = 1;
                                 break;
                         case CMD_LONGDOWN:
                                 if(outside) {
@@ -791,7 +890,7 @@ int main(int argc, char *argv[])
                                 if(outside)
                                         TCOD_map_compute_fov(player->fov, player->x, player->y, 5, true, FOV_BASIC);
                                 if(indungeon)
-                                        TCOD_map_compute_fov(player->fov, player->x, player->y, 2, true, FOV_RESTRICTIVE);
+                                        TCOD_map_compute_fov(player->fov, player->x, player->y, 4, false, FOV_BASIC);
                         }
 
                         if(outside)

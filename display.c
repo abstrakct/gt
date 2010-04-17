@@ -163,6 +163,9 @@ void draw_dungeon(int startx, int starty, player_t *player, int width, int heigh
         for(j=starty,dy=0;j<(starty+height);j++,dy++) {
                 for(i=startx,dx=0;i<(startx+width);i++,dx++) {
                         switch(world->dungeon.cell[j][i].type) {
+                                case D_NOTHING:
+                                        c = ' ';
+                                        break;
                                 case D_WALL:
                                         c = CHAR_DWALL;
                                         break;
@@ -201,6 +204,9 @@ void draw_dungeon_fov(int startx, int starty, player_t *player, int width, int h
         for(j=starty,dy=0;j<(starty+height);j++,dy++) {
                 for(i=startx,dx=0;i<(startx+width);i++,dx++) {
                         switch(world->dungeon.cell[j][i].type) {
+                                case D_NOTHING:
+                                        c = ' ';
+                                        break;
                                 case D_WALL:
                                         c = CHAR_DWALL;
                                         break;

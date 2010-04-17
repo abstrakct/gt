@@ -21,7 +21,7 @@
 #define COLOR_CITY2 TCOD_orange
 
 #define CHAR_DUNGEON 0x09
-#define CHAR_DFLOOR  0x20
+#define CHAR_DFLOOR  0x2E
 #define CHAR_DWALL   0x23
 
 #define CHAR_PLAYER 0x40

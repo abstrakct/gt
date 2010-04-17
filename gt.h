@@ -10,7 +10,7 @@
 //#include "objects.h"
 //#include "creature.h"
 
-#define GT_VERSION  "0.0.13"
+#define GT_VERSION  "0.0.14"
 
 void die(char *message);
 int  dice(int num, int sides, signed int modifier);

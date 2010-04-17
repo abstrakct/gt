@@ -54,3 +54,6 @@ and armor!!
 * 2010-04-10: Monsters now drop their inventory when killed!
 * Made world generation more dependent on XSIZE/YSIZE (and an interesting
 		discovery!)
+
+v0.0.14:
+* 2010-04-17: Made my own dungeon generator!!! Still crude, but working!!!

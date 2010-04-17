@@ -23,8 +23,9 @@
 
 
 /* DUNGEON STUFF */
-#define D_FLOOR 100
-#define D_WALL  101
+#define D_NOTHING 100
+#define D_FLOOR   101
+#define D_WALL    102
 
 #define mapheight YSIZE/2;
 #define mapwidth  XSIZE/2;
@@ -73,9 +74,9 @@ typedef struct {
 
 typedef struct {
         cell_t cell[YSIZE][XSIZE];
-        city_t city[50];
-        city_t village[100];
-        forest_t forest[100];
+        city_t *city;
+        city_t *village;
+        forest_t *forest;
         dungeon_t dungeon;
         int villages, current_village;
         int cities, current_city;
@@ -98,6 +99,7 @@ typedef struct {
 
 void generate_area(int num, int type, int maxsize, int modifier, world_t *world);
 void init_world(world_t *world);
-void generate_world(world_t *world);
+//void generate_world(world_t *world);
+void generate_world(world_t *world, int xsize, int ysize, int minf, int maxf, int minc, int maxc, int minv, int maxv, int mind, int maxd, int mini, int maxi);
 
 #endif
