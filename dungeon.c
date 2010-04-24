@@ -538,6 +538,9 @@ void nothingtowall(world_t *world, int x, int y)
 
 void set_floor(world_t *world, int x, int y)
 {
+        if(x < 0 || x > XSIZE || y < 0 || y > YSIZE)
+                return;
+        
         world->dungeon.cell[y][x].type = D_FLOOR;
         // whatever nothing-cells are around the floor is set to wall
         nothingtowall(world, x-1, y);
@@ -553,7 +556,7 @@ void set_floor(world_t *world, int x, int y)
 void make_corridor(world_t *world, TCOD_map_t *map, int x, int y, int x2, int y2)
 {
         TCOD_path_t path;
-        int i, a, b;
+        //int i, a, b;
 
         path = TCOD_path_new_using_map(*map, 1.41f);
         TCOD_path_compute(path, x, y, x2, y2);
@@ -563,47 +566,70 @@ void make_corridor(world_t *world, TCOD_map_t *map, int x, int y, int x2, int y2
         while(!TCOD_path_is_empty(path)) {
                 int x, y;
                 if(TCOD_path_walk(path, &x, &y, false)) {
-//                        world->dungeon.cell[y][x].type = D_FLOOR;
                         set_floor(world, x, y);
-                        i = ri(1,100);
+
+                        /*i = ri(1,100);
                         if(i<=70) {
-                                a = ri(-1,1);
-                                b = ri(-1,1);
+                                a = ri(0,1);
+                                b = ri(0,1);
                                 // add some more randomness!
-                                set_floor(world, x+b, y+a);
-                        }
+                                if(i<=35)
+                                        set_floor(world, x-b, y-a);
+                                else
+                                        set_floor(world, x+b, y+a);
+                        }*/
                 }
         }
 
         TCOD_path_delete(path);
 }
 
-void make_room_left(world_t *world, int x, int y, int w, int h)
+/*
+ * x,y = upper right corner
+ */
+int make_room_left(world_t *world, int x, int y, int w, int h)
 {
         int sx, sy;
 
-        // let's try to make it simple, stupid
-        for(sx = x; sx>=(x-w); sx--) {
-                for(sy = y; sy>=(y-h); sy--) {
+        // let's try to KISS
+        for(sx = x-1; sx>=(x-w+1); sx--) {
+                for(sy = y-1; sy>=(y-h+1); sy--) {
                         set_floor(world, sx, sy);
-                        //world->dungeon.cell[sy][sx].type = D_FLOOR;
                 }
         }
+
+        return 1; // success!
 }
 
-void make_room_right(world_t *world, int x, int y, int w, int h)
+/*
+ * x,y = upper left corner
+ */
+int make_room_right(world_t *world, int x, int y, int w, int h)
 {
         int sx, sy;
+
+        /*for(sx = x; sx<=(x+w); sx++) {
+                for(sy = y; sy<=(y+h); sy++) {
+                        if(sy > YSIZE || sx > XSIZE)
+                                return 0;
+                        if(world->dungeon.cell[sy][sx].type != D_NOTHING)
+                                return 0;
+                }
+        }*/
 
         // let's try to make it simple, stupid
         for(sx = x; sx<=(x+w); sx++) {
                 for(sy = y; sy<=(y+h); sy++) {
                         set_floor(world, sx, sy);
-                        //world->dungeon.cell[sy][sx].type = D_FLOOR;
                 }
         }
+
+        return 1;
 }
 
+/*
+ * x,y = upper left corner
+ *
 void make_room_down(world_t *world, int x, int y, int w, int h)
 {
         int sx, sy;
@@ -616,6 +642,7 @@ void make_room_down(world_t *world, int x, int y, int w, int h)
                 }
         }
 }
+*/
 
 void clean_up_dungeon(world_t *world)
 {
@@ -635,13 +662,32 @@ void clean_up_dungeon(world_t *world)
         }
 }
 
+struct room {
+        int x, y, w, h;
+};
+
+int isemptyspace(world_t *world, int x, int y, int w, int h)
+{
+        int sx, sy;
+
+        for(sx = x; sx<=(x+w); sx++) {
+                for(sy = y; sy<=(y+h); sy++) {
+                        if(world->dungeon.cell[sy][sx].type != D_NOTHING)
+                                return 0;
+                }
+        }
+
+        return 1;
+}
+
 void my_generate_dungeon(world_t *world, int maxx, int maxy)
 {
         // OK, first attempt at writing my own dungeon generator!
 
         TCOD_map_t map;
-        int i, j, x, y, x2, y2, w, h, dir, counter;
-        int startleftx, startlefty, startrightx, startrighty;
+        signed int i, j, x, y, x2, y2, w, h, dir;
+        int rooms;
+        struct room r[10];
 
         world->dungeon.xsize = maxx;
         world->dungeon.ysize = maxy;
@@ -657,68 +703,114 @@ void my_generate_dungeon(world_t *world, int maxx, int maxy)
                 }
         }
 
-        x = ri(0,maxx);
-        y = ri(0,maxy);
-        x2 = x + ri(0,20);
-        y2 = y + ri(0,20);
-
-        // Then, make a corridor
-        make_corridor(world, &map, x, y, x2, y2);
-        
-        // a room at each end of the corridor...
-        w = ri(3, 10);
-        h = ri(3, 10);
-        make_room_left(world, x, y, w, h);
-        w = ri(3, 10);
-        h = ri(3, 10);
-        make_room_right(world, x2, y2, w, h);
-
-        /* ok, we have a starting point. Now, lets expand. */
-        startleftx = x; startlefty = y; startrightx = x2; startrighty = y2;
-        counter = 0;
-
-        while(counter <= maxy/10) {
-                for(i=0;i<XSIZE;i++) {
-                        for(j=0;j<YSIZE;j++) {
-                                if(world->dungeon.cell[j][i].type == D_WALL)
-                                        TCOD_map_set_properties(map, i, j, true, false);
-                        }
-                }
-                x += w;
-                y += h;
-                dir = ri(0,1);
-                if(dir) { // right 
-                        y += ri((0-h),h);
-                } else {
-                        x += ri((0-w),w);
-                }
-                if(dir) {
-                        y2 = y + ri(h+5,40);
-                } else {
-                        x2 = x - ri(w+5,40);
+        r[0].x = ri(0,maxx);
+        r[0].y = ri(0,maxy);
+        r[0].w = ri(5,15);
+        r[0].h = ri(5,15);
+        //x2 = x + ri(-30,30);
+        //y2 = y + ri(-30,30);
+        rooms = ri(4,9);
+        printf("generating %d rooms\n", rooms);
+        for(i=0;i<rooms;i++) {
+                while(!isemptyspace(world, r[i].x, r[i].y, r[i].w, r[i].h)) {
+                        if(i && !(i%3))
+                                r[i].y+=5; //r[i].h;
+                        if(!i || i%3)
+                                r[i].x+=5; //r[i].w;
                 }
 
-                make_corridor(world, &map, x, y, x2, y2);
-                //x = x2;
-                //y = y2;
-                w = ri(3, 10);
-                h = ri(3, 10);
-                if(dir) { // y
-                        make_room_right(world, x2, y2, w, h);
-                        counter++;
-                } else {
-                        make_room_left(world, x2, y2, w, h);
-                        counter++;
+                printf("room[%d] is from %d,%d to %d,%d\n", i, r[i].x, r[i].y, r[i].x+r[i].w, r[i].y+r[i].h);
+                make_room_right(world, r[i].x, r[i].y, r[i].w, r[i].h);
+                if(i && !(i%3)) {
+                        r[i+1].y = r[i].y + r[i].h + ri(3,10);
+                        r[i+1].x = r[0].x; // + ri(0,5);
                 }
 
-                x2 = x;
-                y2 = y;
-                clean_up_dungeon(world);
-                clean_up_dungeon(world);
-                clean_up_dungeon(world);
+                if((i==0) || (i%3)) {
+                        if(i == 0)
+                                r[i+1].y = r[0].y;
+                        else
+                                r[i+1].y = r[i].y;
+
+                        r[i+1].x = r[i].x + r[i].w + ri(3,10);
+                }
+                r[i+1].w = ri(5,15);
+                r[i+1].h = ri(5,15);
+
         }
 
 
+        for(i=0;i<rooms;i++) {  // now let's connect 'em!
+                for(w=0;w<XSIZE;w++) {
+                        for(h=0;h<YSIZE;h++) {
+                                if(world->dungeon.cell[h][w].type == D_NOTHING)
+                                        TCOD_map_set_properties(map, w, h, false, true);
+                                if(world->dungeon.cell[h][w].type == D_WALL)
+                                        TCOD_map_set_properties(map, w, h, false, false);
+                                if(world->dungeon.cell[h][w].type == D_FLOOR)
+                                        TCOD_map_set_properties(map, w, h, true, true);
+                        }
+                }
+                j = ri(0,rooms-1);
+                while(j == i)
+                        j = ri(0,rooms-1);
+
+                dir = ri(1,4);
+                if(dir == 1) { // corridor starts on left wall
+                        x = r[i].x-1;
+                        y = r[i].y + ri(1,r[i].h);
+                        set_floor(world,x,y);
+                        x-=2;
+                }
+                if(dir == 2) { // corridor starts on right wall
+                        x = r[i].x + r[i].w+1;
+                        y = r[i].y + ri(1,r[i].h);
+                        set_floor(world,x,y);
+                        x+=2;
+                }
+                if(dir == 3) { // corridor starts on "north" wall
+                        x = r[i].x + ri(1,r[i].w);
+                        y = r[i].y-1;
+                        set_floor(world,x,y);
+                        y-=2;
+                }
+                if(dir == 4) { // corridor starts on "south" wall
+                        x = r[i].x + ri(1,r[i].w);
+                        y = r[i].y + r[i].h+1;
+                        set_floor(world,x,y);
+                        y+=2;
+                }
+
+                dir = ri(1,4);
+                if(dir == 1) { // corridor ends on left wall
+                        x2 = r[j].x-1;
+                        y2 = r[j].y + ri(1,r[j].h);
+                        set_floor(world,x2,y2);
+                        x2-=2;
+                }
+                if(dir == 2) { // corridor ends on right wall
+                        x2 = r[j].x + r[j].w+1;
+                        y2 = r[j].y + ri(1,r[j].h);
+                        set_floor(world,x2,y2);
+                        x2+=2;
+                }
+                if(dir == 3) { // corridor ends on "north" wall
+                        x2 = r[j].x + ri(1,r[j].w);
+                        y2 = r[j].y-1;
+                        set_floor(world,x2,y2);
+                        y2-=2;
+                }
+                if(dir == 4) { // corridor ends on "south" wall
+                        x2 = r[j].x + ri(1,r[j].w);
+                        y2 = r[j].y + r[j].h+1;
+                        set_floor(world,x2,y2);
+                        y2+=2;
+                }
+
+                printf("making corridor from room %d to room %d - %d,%d to %d,%d\n", i, j, x, y, x2, y2);
+                make_corridor(world, &map, x, y, x2, y2);
+                clean_up_dungeon(world);
+        }
 }
 
 void init_dungeon(world_t *world, int maxxsize, int maxysize)

@@ -411,6 +411,7 @@ void update_stats(int x, int y, world_t *world, player_t *player)
         youwinprint(TCOD_yellow, "                                                    ");
         uy--;
         youwinprint(TCOD_yellow, "%s", get_current_location_name(world));
+        youwinprint(TCOD_yellow, "x,y = %d, %d", player->x, player->y);
 
         uy=26;
         TCOD_console_rect(NULL, ux, uy, 35, 54, true, TCOD_BKGND_NONE); 

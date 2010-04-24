@@ -38,8 +38,10 @@ void kill(struct creature *creature, world_t *world)
         world->player->wvfactor--;
         //        you("get %d xp!", get_xp(creature));
 
-        creature->prev->next = creature->next;
-        creature->next->prev = creature->prev;
+        if(creature->prev)
+                creature->prev->next = creature->next;
+        if(creature->next)
+                creature->next->prev = creature->prev;
         world->cell[creature->y][creature->x].monster = NULL;
 
         if(creature->inventory) {
