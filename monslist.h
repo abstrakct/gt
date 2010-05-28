@@ -20,10 +20,11 @@ MONSTER("grown up ghost", 'O',   3,   25, hostileai,               1.5,   12,  3
 MONSTER("silent creeper", 'c',   3,   19, hostileai,               0.7,   10, 12,   15,   10,    17,  11,  8,    MF_CANUSEWEAPON|MF_CANUSEARMOR)
 MONSTER("poltergeist",    'O',   4,   27, hostileai,               1.0,   18,  2,    5,    5,    15,   6, 10,     0)
 MONSTER("psycho killer",  'k',   4,   27, simpleoutdoorpathfinder, 1.3,   14, 13,   16,   10,     9,  10, 10,    MF_CANUSEWEAPON|MF_CANUSEARMOR)
+MONSTER("ancient ghost",  'O',   5,   35, hostileai,               1.2,   14,  3,   14,   18,    18,  15, 11,     0)
 MONSTER("zombie geesus",  'j', 100, 1000, simpleoutdoorpathfinder, 1.0,   18, 10,    2,    2,     8,   2, 15,    MF_CANUSEWEAPON|MF_CANUSEARMOR)
 
 END_MONSTERS
 
-#define NUM_MONSTERS 10
+#define NUM_MONSTERS 17
 
 #endif

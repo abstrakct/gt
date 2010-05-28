@@ -864,7 +864,7 @@ int main(int argc, char *argv[])
                         TCOD_console_set_fullscreen(!TCOD_console_is_fullscreen());*/
 
 
-                if(ccell.monster) {
+                if(outside && ccell.monster) {
                         ccell.monster->attacker = player;
                         attack(player, ccell.monster, world);
                         player->x = oldx;

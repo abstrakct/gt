@@ -686,7 +686,7 @@ void my_generate_dungeon(world_t *world, int maxx, int maxy)
 
         TCOD_map_t map;
         signed int i, j, x, y, x2, y2, w, h, dir;
-        int rooms;
+        int rooms, n;
         struct room r[10];
 
         world->dungeon.xsize = maxx;
@@ -714,15 +714,15 @@ void my_generate_dungeon(world_t *world, int maxx, int maxy)
         for(i=0;i<rooms;i++) {
                 while(!isemptyspace(world, r[i].x, r[i].y, r[i].w, r[i].h)) {
                         if(i && !(i%3))
-                                r[i].y+=5; //r[i].h;
+                                r[i].y+=r[i].h+ri(15,25);
                         if(!i || i%3)
-                                r[i].x+=5; //r[i].w;
+                                r[i].x+=r[i].w+ri(15,25);
                 }
 
                 printf("room[%d] is from %d,%d to %d,%d\n", i, r[i].x, r[i].y, r[i].x+r[i].w, r[i].y+r[i].h);
                 make_room_right(world, r[i].x, r[i].y, r[i].w, r[i].h);
                 if(i && !(i%3)) {
-                        r[i+1].y = r[i].y + r[i].h + ri(3,10);
+                        r[i+1].y = r[i].y + r[i].h + ri(15,25);
                         r[i+1].x = r[0].x; // + ri(0,5);
                 }
 
@@ -732,15 +732,14 @@ void my_generate_dungeon(world_t *world, int maxx, int maxy)
                         else
                                 r[i+1].y = r[i].y;
 
-                        r[i+1].x = r[i].x + r[i].w + ri(3,10);
+                        r[i+1].x = r[i].x + r[i].w + ri(15,25);
                 }
                 r[i+1].w = ri(5,15);
                 r[i+1].h = ri(5,15);
-
         }
 
 
-        for(i=0;i<rooms;i++) {  // now let's connect 'em!
+        for(n=0;n<rooms*2;n++) {  // now let's connect 'em!
                 for(w=0;w<XSIZE;w++) {
                         for(h=0;h<YSIZE;h++) {
                                 if(world->dungeon.cell[h][w].type == D_NOTHING)
@@ -751,9 +750,17 @@ void my_generate_dungeon(world_t *world, int maxx, int maxy)
                                         TCOD_map_set_properties(map, w, h, true, true);
                         }
                 }
-                j = ri(0,rooms-1);
-                while(j == i)
+
+                i = n;
+                if(i>=rooms)
+                        i = ri(0,rooms-1);
+                j = i+1;
+                if(j>=rooms)
                         j = ri(0,rooms-1);
+
+                //j = ri(0,rooms-1);
+                //while(j == i)
+                //        j = ri(0,rooms-1);
 
                 dir = ri(1,4);
                 if(dir == 1) { // corridor starts on left wall
@@ -786,31 +793,36 @@ void my_generate_dungeon(world_t *world, int maxx, int maxy)
                         x2 = r[j].x-1;
                         y2 = r[j].y + ri(1,r[j].h);
                         set_floor(world,x2,y2);
-                        x2-=2;
+                        x2--;
                 }
                 if(dir == 2) { // corridor ends on right wall
                         x2 = r[j].x + r[j].w+1;
                         y2 = r[j].y + ri(1,r[j].h);
                         set_floor(world,x2,y2);
-                        x2+=2;
+                        x2++;
                 }
                 if(dir == 3) { // corridor ends on "north" wall
                         x2 = r[j].x + ri(1,r[j].w);
-                        y2 = r[j].y-1;
-                        set_floor(world,x2,y2);
-                        y2-=2;
+                        y2 = r[j].y-2;
+                        //set_floor(world,x2,y2);
+                        //y2-=2;
                 }
                 if(dir == 4) { // corridor ends on "south" wall
                         x2 = r[j].x + ri(1,r[j].w);
-                        y2 = r[j].y + r[j].h+1;
-                        set_floor(world,x2,y2);
-                        y2+=2;
+                        y2 = r[j].y + r[j].h+2;
+                        //set_floor(world,x2,y2);
+                        //y2+=2;
                 }
 
-                printf("making corridor from room %d to room %d - %d,%d to %d,%d\n", i, j, x, y, x2, y2);
-                make_corridor(world, &map, x, y, x2, y2);
+                //printf("making corridor from room %d to room %d - %d,%d to %d,%d\n", i, j, x, y, x2, y2);
+                //make_corridor(world, &map, x, y, x2, y2);
+                printf("first I make corridor from %d,%d to %d,%d\n", x, y, x2, y);
+                make_corridor(world, &map, x, y, x2, y);
+                printf("then I make corridor from %d,%d to %d,%d\n", x2,y, x2, y2);
+                make_corridor(world, &map, x2, y, x2, y2);
                 clean_up_dungeon(world);
         }
+        printf("\n");
 }
 
 void init_dungeon(world_t *world, int maxxsize, int maxysize)

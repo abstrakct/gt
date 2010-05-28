@@ -297,20 +297,22 @@ void update_info(int x, int y, world_t *world, player_t *player, bool seenothing
                 mess_color(TCOD_yellow, "You see a dungeon entrance.");
 
         if(has_objects(player->x, player->y)) {
-                o = world->cell[player->y][player->x].inventory;
-                while(o != NULL) {
-                        if(o->type == OT_GOLD && o->quantity)
-                                yousee("%d %s of gold here.", o->quantity, o->quantity > 1 ? "pieces" : "piece");
-                        if(o->type != OT_GOLD) {
-                                if(identified(o->flags))
-                                        yousee("%s %s here.", a_an(o->fullname), nouppercase(o->fullname));
-                                else
-                                        yousee("%s %s here.", a_an(o->unidname), nouppercase(o->unidname));
+                if(outside) {
+                        o = world->cell[player->y][player->x].inventory;
+                        while(o != NULL) {
+                                if(o->type == OT_GOLD && o->quantity)
+                                        yousee("%d %s of gold here.", o->quantity, o->quantity > 1 ? "pieces" : "piece");
+                                if(o->type != OT_GOLD) {
+                                        if(identified(o->flags))
+                                                yousee("%s %s here.", a_an(o->fullname), nouppercase(o->fullname));
+                                        else
+                                                yousee("%s %s here.", a_an(o->unidname), nouppercase(o->unidname));
+                                }
+                                o = o->next;
                         }
-                        o = o->next;
                 }
-        } else if(world->cell[player->y][player->x].monster) {
-                yousee("a %s here.", world->cell[player->y][player->x].monster->name);
+        /*} else if(world->cell[player->y][player->x].monster) {
+                yousee("a %s here.", world->cell[player->y][player->x].monster->name);*/
         } else {
                 if(!has_dungeon(player->x, player->y) && seenothing) {
                         mess(WV_SEENOTHING);
@@ -354,7 +356,7 @@ int display_inventory(player_t *player)
                 if(identified(o->flags))
                         youwinprint(TCOD_white, "%c %s%s",    o->c, o->flags & OF_INUSE ? "* " : "- ", nouppercase(o->fullname));
                 else
-                        youwinprint(TCOD_white, "%c %s%s %s", o->c, o->flags & OF_INUSE ? "* " : "- ", a_an(o->unidname), nouppercase(o->unidname));
+                        youwinprint(TCOD_white, "%c %s%s %s", o->c, o->flags & OF_INUSE ? "* " : "- ", nouppercase(a_an(o->unidname)), nouppercase(o->unidname));
                 o = o->next;
                 wielded = 0;
                 ny++;
